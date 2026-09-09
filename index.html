@@ -3066,5 +3066,59 @@
       }, { once: true });
     });
   </script>
+  <!-- Form for Gatekeeper Entries -->
+  <form id="gatekeeperForm" style="display: flex; flex-direction: column; max-width: 300px; gap: 10px; margin: 20px 0;">
+    <h3>Vessel Gate Entry</h3>
+    <input type="text" id="portName" placeholder="Port Name" required />
+    <input type="number" step="0.1" id="vesselDraft" placeholder="Vessel Draft" required />
+    <input type="number" id="loa" placeholder="LOA" required />
+    <input type="number" id="cargoMt" placeholder="Cargo MT" required />
+    <input type="text" id="stockpilingStatus" placeholder="Stockpiling Status" required />
+    <button type="submit">Submit Entry</button>
+  </form>
+  <div id="statusMessage"></div>
+
+  <!-- Supabase Integration Script -->
+  <script>
+    const SUPABASE_URL = 'https://tuzrlvivlgkrqyvrmmep.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1enJsdml2bGdrcnF5dnJtbWVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg5NjM2MTAsImV4cCI6MjEwNDUzOTYxMH0.Q4g6-FWDn-k4pQySVtq1YvX1VseexSwYSdMFQ97Ohhw';
+
+    document.getElementById('gatekeeperForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const statusDiv = document.getElementById('statusMessage');
+      statusDiv.innerText = 'Submitting...';
+
+      const formData = {
+        port_name: document.getElementById('portName').value,
+        vessel_draft: parseFloat(document.getElementById('vesselDraft').value),
+        loa: parseFloat(document.getElementById('loa').value),
+        cargo_mt: parseFloat(document.getElementById('cargoMt').value),
+        stockpiling_status: document.getElementById('stockpilingStatus').value
+      };
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/gateleeper_entries`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=representation'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          statusDiv.innerText = 'Entry saved successfully!';
+          document.getElementById('gatekeeperForm').reset();
+        } else {
+          statusDiv.innerText = 'Error saving entry: ' + JSON.stringify(data);
+        }
+      } catch (error) {
+        statusDiv.innerText = 'Network error: ' + error.message;
+      }
+    });
+  </script>
 </body>
 </html>
