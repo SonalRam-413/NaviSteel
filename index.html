@@ -1,0 +1,3070 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaviSteel Control Tower | Ministry of Steel, Govt. of India</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            marine: {
+              950: '#070c18',
+              900: '#0f172a',
+              850: '#131e36',
+              800: '#1e293b',
+              700: '#334155',
+              600: '#475569',
+              accent: '#38bdf8',
+              cyan: '#06b6d4',
+              teal: '#14b8a6',
+              amber: '#f59e0b',
+              orange: '#f97316',
+              danger: '#ef4444',
+              success: '#10b981'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Cinzel"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          animation: {
+            'float-ship': 'vesselBob 4.8s ease-in-out infinite',
+            'wave-slow': 'waveMotion 10s linear infinite',
+            'wave-fast': 'waveMotion 6s linear infinite',
+            'radar-sweep': 'radarSweep 3.5s linear infinite',
+            'pulse-glow': 'pulseGlow 2.4s ease-in-out infinite',
+            'shimmer': 'shimmer 2.5s infinite linear'
+          },
+          keyframes: {
+            vesselBob: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-8px) rotate(-0.5deg)' }
+            },
+            waveMotion: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' }
+            },
+            radarSweep: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.4', filter: 'drop-shadow(0 0 15px rgba(56,189,248,0.35))' },
+              '50%': { opacity: '0.85', filter: 'drop-shadow(0 0 30px rgba(56,189,248,0.75))' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbars & Maritime Atmosphere */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #070c18; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid #334155; }
+    ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
+
+    .glow-gold {
+      color: #fbbf24;
+      text-shadow: 0 0 20px rgba(251, 191, 36, 0.45), 0 0 45px rgba(245, 158, 11, 0.25);
+    }
+
+    .glow-cyan-btn {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #0f766e 100%);
+      box-shadow: 0 0 25px rgba(14, 165, 233, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glow-cyan-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 0 40px rgba(14, 165, 233, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+    .glass-card {
+      background: rgba(19, 30, 54, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(56, 189, 248, 0.15);
+    }
+
+    .glass-card-hover {
+      transition: all 0.25s ease-out;
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.25);
+    }
+
+    .grid-lines {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(7, 12, 24, 0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    /* Satellite Radar and Maritime Shipping Animations */
+    @keyframes shipTravelPath {
+      0% { offset-distance: 0%; }
+      100% { offset-distance: 100%; }
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.85); opacity: 0.9; }
+      50% { transform: scale(1.6); opacity: 0.2; }
+      100% { transform: scale(2.2); opacity: 0; }
+    }
+    @keyframes dashMove {
+      to { stroke-dashoffset: -40; }
+    }
+    .animate-dash {
+      animation: dashMove 1.8s linear infinite;
+    }
+    .pulse-ring {
+      transform-origin: center;
+      animation: pulseRing 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-marine-900 text-slate-100 font-sans min-h-screen relative overflow-x-hidden selection:bg-cyan-500 selection:text-white">
+
+  <!-- Ambient Maritime Grid Background -->
+  <div class="fixed inset-0 grid-lines pointer-events-none z-0"></div>
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-cyan-900/15 rounded-full blur-3xl pointer-events-none z-0"></div>
+  <div class="fixed bottom-10 right-1/4 w-[30rem] h-[30rem] bg-blue-950/30 rounded-full blur-3xl pointer-events-none z-0"></div>
+
+  <!-- Top Global Security Bar -->
+  <header class="relative z-30 border-b border-slate-800/80 bg-marine-950/90 backdrop-blur-md px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-slate-400">
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-950/80 text-emerald-400 border border-emerald-800/60">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-ping"></span>
+          SYS.STATUS: OPERATIONAL
+        </span>
+        <span class="text-slate-600">|</span>
+        <span class="hidden sm:inline">SATCOMM LATENCY: <strong class="text-cyan-400">28ms (ISRO GSAT-7R)</strong></span>
+      </div>
+
+      <div class="flex items-center space-x-4">
+        <span class="text-slate-400">VESSEL TRACKING: <span class="text-amber-400 font-bold">14 CAPESIZE EN ROUTE</span></span>
+        <span class="text-slate-600">|</span>
+        <button id="soundToggleBtn" onclick="toggleAudioEngine()" class="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 transition">
+          <svg id="soundIconOn" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+          </svg>
+          <span id="soundStatusLabel">AUDIO: ON</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 1. HERO LANDING PAGE (3-COLUMN GRID)                                       -->
+  <!-- ========================================================================= -->
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch pt-2 lg:pt-6">
+
+      <!-- LEFT COLUMN: Welcome Text & Branding (lg:col-span-4) -->
+      <div class="lg:col-span-4 flex flex-col justify-between glass-card rounded-2xl p-6 lg:p-8 border border-slate-800 relative overflow-hidden group">
+        <!-- Top Accent Gradient Line -->
+        <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 via-cyan-400 to-blue-600"></div>
+
+        <div>
+          <!-- Indian Greeting -->
+          <div class="flex items-center space-x-2.5 mb-3">
+            <span class="text-xl">🙏</span>
+            <span class="font-display font-bold tracking-[0.25em] text-lg uppercase glow-gold">NAMASTE</span>
+            <span class="h-px flex-1 bg-gradient-to-r from-amber-400/40 to-transparent"></span>
+          </div>
+
+          <!-- Large Bold Heading -->
+          <h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] leading-[1.12] font-extrabold text-white tracking-tight mb-4">
+            Welcome to <br/>
+            <span class="bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-400 bg-clip-text text-transparent">
+              NaviSteel
+            </span>
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-normal">
+            Intelligent Freight Forecasting &amp; Bulk Cargo Control Tower for the 
+            <strong class="text-white font-semibold"> Ministry of Steel</strong>.
+          </p>
+
+          <!-- Core Capability Highlights -->
+          <div class="space-y-3 pt-2 border-t border-slate-800/80">
+            <div class="flex items-start space-x-3 text-xs text-slate-300">
+              <span class="flex-shrink-0 w-5 h-5 rounded-md bg-cyan-950/80 border border-cyan-800/50 flex items-center justify-center text-cyan-400">
+                ✓
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Hydrodynamic Gatekeeper</strong>
+                Real-time validation against tidal draft, LOA, and monsoon sea-states.
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 text-xs text-slate-300">
+              <span class="flex-shrink-0 w-5 h-5 rounded-md bg-cyan-950/80 border border-cyan-800/50 flex items-center justify-center text-cyan-400">
+                ✓
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Dynamic Re-routing Engine</strong>
+                Instant fallback harbor suggestions to eradicate severe grounding risks.
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-3 text-xs text-slate-300">
+              <span class="flex-shrink-0 w-5 h-5 rounded-md bg-cyan-950/80 border border-cyan-800/50 flex items-center justify-center text-cyan-400">
+                ✓
+              </span>
+              <div>
+                <strong class="text-slate-200 block">Strategic Coking Coal Intelligence</strong>
+                Stockpile runway protection, 12-month freight hedging, and co-loading allocation.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Footer Pill -->
+        <div class="mt-6 pt-4 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-400">
+          <div>MONITORED HARBORS: <span class="text-cyan-400 font-semibold">4 DEEPWATER</span></div>
+          <div>PORTAL REV: <span class="text-slate-200 font-semibold">v2.6 SIH</span></div>
+        </div>
+      </div>
+
+      <!-- CENTER COLUMN: Visual Vessel Graphic & Action Button (lg:col-span-5) -->
+      <div class="lg:col-span-5 flex flex-col items-center justify-between glass-card rounded-2xl p-6 lg:p-7 border border-cyan-900/40 relative overflow-hidden bg-gradient-to-b from-marine-850/90 to-marine-950/90">
+        <!-- Glow Radar / Atmosphere -->
+        <div class="absolute -top-16 left-1/2 -translate-x-1/2 w-64 h-64 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <!-- Section Label -->
+        <div class="w-full flex items-center justify-between text-[11px] font-mono text-cyan-400/90 tracking-wider mb-2">
+          <span class="flex items-center space-x-1.5">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>VESSEL HYDRO-SIMULATION</span>
+          </span>
+          <span class="text-slate-400">DRAFT MARK: 15.5m SW</span>
+        </div>
+
+        <!-- Prominent Bulk Carrier Vessel Graphic (Custom SVG with Waterline & Draft Marks) -->
+        <div class="w-full relative py-4 my-auto flex flex-col items-center justify-center">
+          <div class="relative w-full max-w-[440px] animate-float-ship">
+            <!-- Vessel SVG Graphic -->
+            <svg class="w-full h-auto drop-shadow-[0_15px_25px_rgba(0,0,0,0.7)]" viewBox="0 0 600 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Hull Gradients -->
+                <linearGradient id="hullGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#1e293b" />
+                  <stop offset="65%" stop-color="#0f172a" />
+                  <stop offset="100%" stop-color="#991b1b" /> <!-- Anti-fouling red bottom below waterline -->
+                </linearGradient>
+                <linearGradient id="superstructureGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#f8fafc" />
+                  <stop offset="50%" stop-color="#e2e8f0" />
+                  <stop offset="100%" stop-color="#cbd5e1" />
+                </linearGradient>
+                <linearGradient id="craneGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#d97706" />
+                </linearGradient>
+                <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#0284c7" stop-opacity="0.85" />
+                  <stop offset="100%" stop-color="#082f49" stop-opacity="0.95" />
+                </linearGradient>
+              </defs>
+
+              <!-- Sky/Sea Horizon subtle guide -->
+              <line x1="10" y1="190" x2="590" y2="190" stroke="#334155" stroke-dasharray="4 4" stroke-width="0.8" opacity="0.4"/>
+
+              <!-- Superstructure / Bridge Tower (Stern / Aft on Left) -->
+              <g id="superstructure">
+                <!-- Navigation Bridge -->
+                <rect x="70" y="65" width="80" height="75" rx="3" fill="url(#superstructureGrad)" />
+                <!-- Bridge Wings -->
+                <polygon points="60,82 160,82 150,92 70,92" fill="#94a3b8" />
+                <!-- Windows -->
+                <rect x="74" y="74" width="72" height="7" rx="1" fill="#0f172a" />
+                <!-- Radar Mast & Antennas -->
+                <line x1="110" y1="65" x2="110" y2="35" stroke="#475569" stroke-width="3" />
+                <line x1="95" y1="42" x2="125" y2="42" stroke="#475569" stroke-width="2" />
+                <ellipse cx="110" cy="34" rx="12" ry="3" fill="#0284c7" />
+                <circle cx="110" cy="34" r="2" fill="#38bdf8" />
+                <!-- Funnel / Smokestack with Indian Tricolor Stripe -->
+                <polygon points="50,110 50,75 66,75 66,110" fill="#1e293b" />
+                <rect x="50" y="86" width="16" height="3" fill="#f97316" />
+                <rect x="50" y="89" width="16" height="3" fill="#ffffff" />
+                <rect x="50" y="92" width="16" height="3" fill="#16a34a" />
+                <!-- Exhaust Top Pipe -->
+                <rect x="53" y="68" width="10" height="7" fill="#0f172a" />
+              </g>
+
+              <!-- Cargo Hold Hatches (Capesize Bulk Carrier Coamings) -->
+              <g id="hatches">
+                <!-- Hatch 1 -->
+                <rect x="180" y="125" width="60" height="15" rx="2" fill="#334155" stroke="#475569" stroke-width="1.5" />
+                <!-- Hatch 2 -->
+                <rect x="260" y="125" width="60" height="15" rx="2" fill="#334155" stroke="#475569" stroke-width="1.5" />
+                <!-- Hatch 3 -->
+                <rect x="340" y="125" width="60" height="15" rx="2" fill="#334155" stroke="#475569" stroke-width="1.5" />
+                <!-- Hatch 4 -->
+                <rect x="420" y="125" width="60" height="15" rx="2" fill="#334155" stroke="#475569" stroke-width="1.5" />
+              </g>
+
+              <!-- Deck Cranes / Gantry Masts -->
+              <g id="deckCranes">
+                <rect x="245" y="95" width="8" height="45" fill="url(#craneGrad)" />
+                <line x1="249" y1="95" x2="220" y2="75" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+                <rect x="405" y="95" width="8" height="45" fill="url(#craneGrad)" />
+                <line x1="409" y1="95" x2="380" y2="75" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" />
+              </g>
+
+              <!-- Forward Forecastle & Bow Mast -->
+              <polygon points="490,140 540,135 535,140 490,140" fill="#64748b" />
+              <line x1="520" y1="135" x2="520" y2="100" stroke="#94a3b8" stroke-width="2.5" />
+              <circle cx="520" cy="98" r="2.5" fill="#facc15" />
+
+              <!-- Main Hull Profile (Modern Bulk Carrier with Bulbous Bow & Stern Transom) -->
+              <path d="M 40,140 
+                       L 165,140 
+                       L 495,140 
+                       L 550,148 
+                       Q 570,185 555,208 
+                       Q 540,225 510,225 
+                       L 85,225 
+                       L 40,185 
+                       Z" 
+                    fill="url(#hullGrad)" 
+                    stroke="#0284c7" 
+                    stroke-width="1.5" />
+
+              <!-- Vessel Name Plate -->
+              <text x="515" y="162" fill="#cbd5e1" font-size="7" font-weight="700" font-family="sans-serif">STEEL MARINER</text>
+
+              <!-- Waterline / Plimsoll & Draft Mark Scale at Bow -->
+              <g id="draftMarks">
+                <!-- White Waterline Strip -->
+                <line x1="38" y1="190" x2="560" y2="190" stroke="#f8fafc" stroke-width="2.5" stroke-dasharray="14 3" opacity="0.9" />
+                
+                <!-- Draft Scale Ruler (Bow) -->
+                <line x1="540" y1="165" x2="540" y2="215" stroke="#38bdf8" stroke-width="1" />
+                <line x1="536" y1="170" x2="540" y2="170" stroke="#e2e8f0" stroke-width="1" />
+                <text x="525" y="172" fill="#93c5fd" font-size="6" font-family="monospace">18m</text>
+                <line x1="534" y1="180" x2="540" y2="180" stroke="#e2e8f0" stroke-width="1" />
+                <text x="525" y="182" fill="#93c5fd" font-size="6" font-family="monospace">16m</text>
+                <!-- Active Draft line indicator (15.5m) -->
+                <line x1="532" y1="185" x2="540" y2="185" stroke="#f59e0b" stroke-width="1.5" />
+                <text x="500" y="187" fill="#fbbf24" font-size="6.5" font-weight="bold" font-family="monospace">▶ 15.5m</text>
+                <line x1="536" y1="195" x2="540" y2="195" stroke="#e2e8f0" stroke-width="1" />
+                <text x="525" y="197" fill="#93c5fd" font-size="6" font-family="monospace">14m</text>
+                <line x1="536" y1="205" x2="540" y2="205" stroke="#e2e8f0" stroke-width="1" />
+                <text x="525" y="207" fill="#93c5fd" font-size="6" font-family="monospace">12m</text>
+              </g>
+
+              <!-- Dynamic Water Waves with Translucent Layers -->
+              <g id="animatedWater">
+                <!-- Back Water Swell -->
+                <path d="M 10,192 
+                         Q 70,184 140,192 
+                         T 280,192 
+                         T 420,192 
+                         T 580,192 
+                         L 580,240 
+                         L 10,240 Z" 
+                      fill="url(#oceanGrad)" 
+                      opacity="0.7" />
+
+                <!-- Front Wave Crest -->
+                <path d="M 5,196 
+                         Q 85,204 165,196 
+                         T 325,196 
+                         T 485,196 
+                         T 595,196 
+                         L 595,250 
+                         L 5,250 Z" 
+                      fill="#0369a1" 
+                      opacity="0.85" />
+
+                <!-- Bow Wave Splash / White Water Wake -->
+                <path d="M 535,190 Q 555,182 565,195 Q 550,194 535,190 Z" fill="#ffffff" opacity="0.8" />
+                <path d="M 45,193 Q 30,191 20,198 Q 35,196 45,193 Z" fill="#ffffff" opacity="0.6" />
+              </g>
+            </svg>
+          </div>
+
+          <!-- Vessel Spec Micro-Label -->
+          <div class="flex items-center space-x-4 text-[11px] font-mono text-slate-400 mt-2 bg-marine-950/80 px-3 py-1.5 rounded-full border border-slate-800">
+            <span>LOA: <strong class="text-slate-200">265m</strong></span>
+            <span class="text-slate-600">•</span>
+            <span>BEAM: <strong class="text-slate-200">43m</strong></span>
+            <span class="text-slate-600">•</span>
+            <span>DWT: <strong class="text-slate-200">85,000 MT</strong></span>
+          </div>
+        </div>
+
+        <!-- Main Action Button Directly Below Ship Visual -->
+        <div class="w-full pt-3">
+          <a href="#gatekeeperSection" 
+             class="glow-cyan-btn w-full py-4 px-6 rounded-xl flex items-center justify-center space-x-3 text-white font-bold text-base tracking-wider uppercase group shadow-lg">
+            <span>GET STARTED</span>
+            <span class="text-xl transition-transform duration-300 group-hover:translate-x-2">➔</span>
+          </a>
+          <p class="text-center text-[11px] text-slate-400 mt-2">
+            Click to activate the Hydrodynamic Gatekeeper &amp; Port Match Engine
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Government & Organization Branding (lg:col-span-3) -->
+      <div class="lg:col-span-3 flex flex-col justify-between glass-card rounded-2xl p-6 border border-slate-800 relative overflow-hidden">
+        <!-- Tricolor Indian Ribbon Accent on Top -->
+        <div class="absolute top-0 left-0 right-0 h-1.5 flex">
+          <div class="w-1/3 bg-orange-500"></div>
+          <div class="w-1/3 bg-white"></div>
+          <div class="w-1/3 bg-emerald-600"></div>
+        </div>
+
+        <div>
+          <!-- Official Ministry of Steel Emblem / Logo Card -->
+          <div class="bg-marine-950/90 rounded-xl p-5 border border-slate-700/60 text-center mb-5 relative group shadow-inner">
+            
+            <!-- Ashoka Lion Capital Vector Emblem -->
+            <div class="w-20 h-20 mx-auto mb-3 relative flex items-center justify-center">
+              <div class="absolute inset-0 bg-amber-500/10 rounded-full blur-md"></div>
+              <svg class="w-16 h-16 text-amber-400 drop-shadow-[0_2px_8px_rgba(245,158,11,0.4)]" viewBox="0 0 100 100" fill="currentColor">
+                <!-- Ashoka Pillar Capital stylized emblem -->
+                <circle cx="50" cy="50" r="46" fill="none" stroke="#f59e0b" stroke-width="2.5" opacity="0.6"/>
+                <circle cx="50" cy="50" r="41" fill="none" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3 3"/>
+                <!-- Central Wheel / Dharma Chakra Spokes -->
+                <circle cx="50" cy="50" r="8" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                <circle cx="50" cy="50" r="2.5" fill="#f59e0b"/>
+                <!-- 24 Spokes representation -->
+                <line x1="50" y1="42" x2="50" y2="58" stroke="#f59e0b" stroke-width="1.2"/>
+                <line x1="42" y1="50" x2="58" y2="50" stroke="#f59e0b" stroke-width="1.2"/>
+                <line x1="44.3" y1="44.3" x2="55.7" y2="55.7" stroke="#f59e0b" stroke-width="1.2"/>
+                <line x1="44.3" y1="55.7" x2="55.7" y2="44.3" stroke="#f59e0b" stroke-width="1.2"/>
+                <!-- Stylized Lion Profiles -->
+                <path d="M 32,38 C 30,26 40,20 50,20 C 60,20 70,26 68,38 C 65,45 58,47 50,47 C 42,47 35,45 32,38 Z" fill="#f59e0b" opacity="0.95"/>
+                <!-- Base Pedestal -->
+                <rect x="25" y="70" width="50" height="7" rx="1.5" fill="#f59e0b" opacity="0.9"/>
+                <rect x="20" y="78" width="60" height="5" rx="1.5" fill="#f59e0b" opacity="0.95"/>
+                <!-- Satyameva Jayate Devnagari stylized inscription bar -->
+                <text x="50" y="89" fill="#fef3c7" font-size="5" font-weight="700" text-anchor="middle" letter-spacing="1">सत्यमेव जयते</text>
+              </svg>
+            </div>
+
+            <!-- Card Label -->
+            <div class="text-[11px] font-mono tracking-widest text-amber-400 font-semibold mb-1 uppercase">
+              GOVERNMENT OF INDIA
+            </div>
+            <h2 class="text-sm font-extrabold text-white uppercase tracking-wider leading-snug">
+              MINISTRY OF STEEL, GOVT. OF INDIA
+            </h2>
+            <div class="text-[10px] text-slate-400 mt-1">
+              National Steel Logistics &amp; Strategic Raw Material Directorate
+            </div>
+          </div>
+
+          <!-- Badges Section -->
+          <div class="space-y-2.5">
+            <!-- Badge 1: SIH 2026 -->
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-amber-500/30">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span class="text-xs font-bold text-amber-300">SIH 2026 Prototype</span>
+              </div>
+              <span class="text-[10px] font-mono text-amber-400/80 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/50">
+                FINALIST
+              </span>
+            </div>
+
+            <!-- Badge 2: Team Tensor Tactics -->
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900/80 border border-cyan-500/30">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                <span class="text-xs font-bold text-cyan-300">Team Tensor Tactics</span>
+              </div>
+              <span class="text-[10px] font-mono text-cyan-400/80 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-800/50">
+                AI / ML TEAM
+              </span>
+            </div>
+
+            <!-- Security Tag -->
+            <div class="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800 text-[10px] font-mono text-slate-400 leading-tight">
+              <span class="text-slate-300 font-bold block mb-0.5">GATEKEEPER SECURITY PROTOCOL:</span>
+              Compliant with Major Port Authorities Act 2021 &amp; DG Shipping Navigational Clearance.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column Footer / Test Sound Trigger -->
+        <div class="mt-5 pt-3 border-t border-slate-800/70 text-center">
+          <button onclick="previewAudioFeedback()" class="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 transition flex items-center justify-center mx-auto space-x-1">
+            <span>🔊 Test Audio Chime &amp; Buzzer</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- 2. CHUNK 1 GATEKEEPER PANEL (2-COLUMN GRID)                               -->
+    <!-- ========================================================================= -->
+    <section id="gatekeeperSection" class="mt-14 pt-8 border-t border-slate-800">
+      
+      <!-- Section Title & Status Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400 tracking-wider uppercase mb-1">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+            <span>CHUNK 1 // GATEKEEPER &amp; SAFETY ENGINE</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Vessel Discharge &amp; Port Hydrodynamic Validator
+          </h2>
+          <p class="text-sm text-slate-400 mt-1 max-w-2xl">
+            Autonomous physical screening engine verifying vessel draft, turning basin LOA constraints, and live sea state weather clearances before port entry.
+          </p>
+        </div>
+
+        <!-- Quick Preset Switcher -->
+        <div class="flex flex-wrap items-center gap-1.5 bg-marine-950/90 p-1.5 rounded-xl border border-slate-800 text-xs font-mono">
+          <span class="text-slate-400 px-2 hidden sm:inline">PRESETS:</span>
+          <button type="button" onclick="loadPreset('vizag_fail')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-red-300 hover:text-red-200 transition border border-red-900/40">
+            Vizag Draft Fail
+          </button>
+          <button type="button" onclick="loadPreset('paradip_pass')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 hover:text-emerald-200 transition border border-emerald-900/40">
+            Paradip Pass
+          </button>
+          <button type="button" onclick="loadPreset('weather_fail')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-orange-300 hover:text-orange-200 transition border border-orange-900/40">
+            Storm Wave Fail (>2.5m)
+          </button>
+          <button type="button" onclick="loadPreset('haldia_fail')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 transition border border-amber-900/40">
+            Haldia Fail
+          </button>
+        </div>
+      </div>
+
+      <!-- 2-COLUMN GRID: FORM vs PORT CAPABILITIES -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- LEFT COLUMN: "VESSEL & VOYAGE INPUTS" Form (lg:col-span-6) -->
+        <div class="lg:col-span-6 glass-card rounded-2xl p-6 sm:p-7 border border-slate-800 relative">
+          <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
+            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+              <span class="text-cyan-400">⚓</span>
+              <span>VESSEL &amp; VOYAGE INPUTS</span>
+            </h3>
+            <span class="text-xs font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded">FORM C-104</span>
+          </div>
+
+          <form id="validationForm" onsubmit="handleValidation(event)" class="space-y-4">
+            
+            <!-- 1. Discharge Port Dropdown -->
+            <div>
+              <label for="dischargePort" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                Target Discharge Port <span class="text-cyan-400">*</span>
+              </label>
+              <div class="relative">
+                <select id="dischargePort" onchange="onPortSelectChange()" class="w-full bg-marine-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-white rounded-xl px-4 py-3 text-sm appearance-none transition outline-none cursor-pointer">
+                  <option value="Vizag" selected>Visakhapatnam (Vizag) Port</option>
+                  <option value="Paradip">Paradip Deep Water Port</option>
+                  <option value="Haldia">Haldia Dock Complex</option>
+                  <option value="Dhamra">Dhamra Deep Draft Port</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                  ▼
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Vessel Name / IMO -->
+            <div>
+              <label for="vesselName" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                Vessel Name / IMO Number <span class="text-cyan-400">*</span>
+              </label>
+              <input type="text" id="vesselName" value="MV Steel Mariner" class="w-full bg-marine-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-white rounded-xl px-4 py-3 text-sm transition outline-none font-mono" placeholder="e.g. MV Steel Mariner / IMO 9821445" required />
+            </div>
+
+            <!-- Dual Fields: Draft & LOA -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- 3. Vessel Draft (m) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="vesselDraft" class="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                    Vessel Draft (m) <span class="text-cyan-400">*</span>
+                  </label>
+                  <span class="text-[11px] font-mono text-amber-400" id="draftFeedback">Current: 15.5m</span>
+                </div>
+                <div class="relative">
+                  <input type="number" id="vesselDraft" step="0.1" min="4.0" max="25.0" value="15.5" oninput="updateLiveComparison()" class="w-full bg-marine-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-white rounded-xl px-4 py-3 text-sm font-mono transition outline-none" required />
+                  <span class="absolute right-3.5 top-3 text-xs font-mono text-slate-400">Meters</span>
+                </div>
+              </div>
+
+              <!-- 4. Length Overall / LOA (m) -->
+              <div>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="vesselLoa" class="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                    Length Overall (LOA) <span class="text-cyan-400">*</span>
+                  </label>
+                  <span class="text-[11px] font-mono text-slate-400">Max: 350m</span>
+                </div>
+                <div class="relative">
+                  <input type="number" id="vesselLoa" step="1" min="50" max="400" value="265" oninput="updateLiveComparison()" class="w-full bg-marine-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-white rounded-xl px-4 py-3 text-sm font-mono transition outline-none" required />
+                  <span class="absolute right-3.5 top-3 text-xs font-mono text-slate-400">Meters</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Cargo Quantity (MT) -->
+            <div>
+              <label for="cargoQuantity" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                Cargo Quantity (Metric Tons) <span class="text-cyan-400">*</span>
+              </label>
+              <div class="relative">
+                <input type="number" id="cargoQuantity" step="500" min="5000" max="250000" value="85000" oninput="onCargoQuantityChange()" class="w-full bg-marine-950 border border-slate-700 focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-white rounded-xl px-4 py-3 text-sm font-mono transition outline-none" required />
+                <span class="absolute right-3.5 top-3 text-xs font-mono text-slate-400">MT (Coking Coal)</span>
+              </div>
+            </div>
+
+            <!-- Live Environmental / Weather Simulator Controls (Open-Meteo Dynamic Port Fetch) -->
+            <div class="p-4 rounded-xl bg-marine-950/80 border border-cyan-900/50 space-y-3 shadow-inner">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-800/80">
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <span class="text-sm">🌊</span>
+                    <h4 id="weatherCardTitle" class="font-mono text-xs sm:text-sm text-cyan-300 font-bold tracking-wide">
+                      LIVE WEATHER: Visakhapatnam (Vizag) Port Approach Route
+                    </h4>
+                  </div>
+                  <div class="flex items-center space-x-2 text-[10px] font-mono text-slate-400 mt-1 ml-5">
+                    <span id="weatherCoordsLabel">LAT: 17.68° N • LON: 83.21° E</span>
+                    <span class="text-slate-600">|</span>
+                    <span id="weatherSourceLabel" class="text-cyan-400 flex items-center">
+                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 mr-1 animate-ping"></span>
+                      Open-Meteo Live API
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2 self-start sm:self-center">
+                  <span id="weatherStatusBadge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                    CALM SEA STATE
+                  </span>
+                  <button type="button" onclick="refreshCurrentPortWeather(true)" title="Sync latest Open-Meteo data" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 text-[10px] font-mono transition flex items-center space-x-1">
+                    <span id="refreshSpinner">🔄</span>
+                    <span>Sync</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Live Telemetry Stats & Sliders -->
+              <div class="grid grid-cols-2 gap-3 text-xs">
+                <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/90">
+                  <div class="flex justify-between text-[11px] mb-1">
+                    <span class="text-slate-400">Wave Height:</span>
+                    <strong id="waveValLabel" class="text-cyan-400 font-mono text-sm">1.1m</strong>
+                  </div>
+                  <input type="range" id="waveHeight" min="0.2" max="5.0" step="0.1" value="1.1" oninput="onManualWeatherChange()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                  <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+                    <span>Limit: ≤ 2.5m</span>
+                    <span id="waveSafetyTag" class="text-emerald-400 font-bold">SAFE</span>
+                  </div>
+                </div>
+
+                <div class="p-2.5 rounded-lg bg-slate-900/80 border border-slate-800/90">
+                  <div class="flex justify-between text-[11px] mb-1">
+                    <span class="text-slate-400">Wind Velocity:</span>
+                    <strong id="windValLabel" class="text-cyan-400 font-mono text-sm">16 km/h</strong>
+                  </div>
+                  <input type="range" id="windSpeed" min="5" max="75" step="1" value="16" oninput="onManualWeatherChange()" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                  <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+                    <span>Limit: ≤ 40 km/h</span>
+                    <span id="windSafetyTag" class="text-emerald-400 font-bold">SAFE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-0.5">
+                <span>Marine Model: Open-Meteo ECMWF Wave &amp; GFS</span>
+                <span class="text-slate-400">Drag sliders to test storm thresholds</span>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <div class="pt-2">
+              <button type="submit" id="validateBtn" class="glow-cyan-btn w-full py-4 px-6 rounded-xl text-white font-bold text-sm sm:text-base tracking-wider uppercase flex items-center justify-center space-x-3 shadow-xl">
+                <span>RUN PHYSICAL SAFETY VALIDATION</span>
+                <span class="text-lg">⚡</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- RIGHT COLUMN: "TARGET PORT CAPABILITIES" Data Card (lg:col-span-6) -->
+        <div class="lg:col-span-6 flex flex-col justify-between glass-card rounded-2xl p-6 sm:p-7 border border-slate-800 relative">
+          
+          <div>
+            <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-800">
+              <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                <span class="text-amber-400">🏢</span>
+                <span>TARGET PORT CAPABILITIES</span>
+              </h3>
+              <span class="text-xs font-mono text-cyan-400">EAST COAST TERMINALS</span>
+            </div>
+
+            <!-- Active Selected Port Spotlight Card -->
+            <div id="spotlightCard" class="p-4 rounded-xl bg-marine-950/80 border border-cyan-800/40 mb-6 transition-all duration-300">
+              <div class="flex items-center justify-between mb-2">
+                <span id="spotlightPortName" class="text-base font-bold text-white tracking-wide">Visakhapatnam (Vizag)</span>
+                <span id="spotlightPortCode" class="text-xs font-mono bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800/50">IN-VTZ</span>
+              </div>
+              
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center my-3">
+                <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">Max Permissible Draft</div>
+                  <div id="spotlightMaxDraft" class="text-lg font-extrabold text-cyan-400 font-mono">14.5 m</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">Max Permissible LOA</div>
+                  <div id="spotlightMaxLoa" class="text-lg font-extrabold text-cyan-400 font-mono">280 m</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">Berth Capacity</div>
+                  <div class="text-lg font-extrabold text-slate-200 font-mono">120K MT</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-slate-900/90 border border-slate-800">
+                  <div class="text-[10px] font-mono text-slate-400 uppercase">Navigation Type</div>
+                  <div class="text-xs font-bold text-emerald-400 mt-1">Outer Harbour</div>
+                </div>
+              </div>
+
+              <!-- Real-time Draft Clearance Gauge Indicator -->
+              <div class="mt-3 pt-3 border-t border-slate-800/80">
+                <div class="flex justify-between text-xs font-mono mb-1">
+                  <span class="text-slate-400">Vessel Draft vs Port Max:</span>
+                  <span id="gaugeStatusText" class="font-bold text-red-400">EXCEEDED BY 1.0m</span>
+                </div>
+                <div class="w-full h-3 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800">
+                  <div id="gaugeBar" class="h-full bg-red-500 rounded-full transition-all duration-300" style="width: 106.8%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Master Port Capabilities Reference Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs font-mono">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400 uppercase">
+                    <th class="py-2.5 px-3">Port Name</th>
+                    <th class="py-2.5 px-3 text-right">Max Draft</th>
+                    <th class="py-2.5 px-3 text-right">Max LOA</th>
+                    <th class="py-2.5 px-3 text-center">Live Weather (Open-Meteo)</th>
+                    <th class="py-2.5 px-3 text-center">Safety Status</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60" id="portTableBody">
+                  <!-- Row 1: Vizag -->
+                  <tr id="row-Vizag" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2.5 px-3 font-semibold text-slate-200 flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                      <span>Vizag</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-bold text-cyan-400">14.5 m</td>
+                    <td class="py-2.5 px-3 text-right text-slate-300">280 m</td>
+                    <td class="py-2.5 px-3 text-center" id="weather-Vizag">
+                      <span class="text-cyan-300 font-bold">1.1m</span> <span class="text-slate-500">•</span> <span class="text-slate-300">16 km/h</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center" id="badge-Vizag">
+                      <span class="px-2 py-0.5 rounded text-[10px] bg-red-950 text-red-400 border border-red-900 font-bold">EXCEEDS</span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2: Paradip -->
+                  <tr id="row-Paradip" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2.5 px-3 font-semibold text-slate-200 flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                      <span>Paradip</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-bold text-cyan-400">16.0 m</td>
+                    <td class="py-2.5 px-3 text-right text-slate-300">300 m</td>
+                    <td class="py-2.5 px-3 text-center" id="weather-Paradip">
+                      <span class="text-cyan-300 font-bold">1.1m</span> <span class="text-slate-500">•</span> <span class="text-slate-300">20 km/h</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center" id="badge-Paradip">
+                      <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-900 font-bold">SAFE</span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3: Haldia -->
+                  <tr id="row-Haldia" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2.5 px-3 font-semibold text-slate-200 flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                      <span>Haldia</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-bold text-cyan-400">8.5 m</td>
+                    <td class="py-2.5 px-3 text-right text-slate-300">220 m</td>
+                    <td class="py-2.5 px-3 text-center" id="weather-Haldia">
+                      <span class="text-cyan-300 font-bold">0.2m</span> <span class="text-slate-500">•</span> <span class="text-slate-300">12 km/h</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center" id="badge-Haldia">
+                      <span class="px-2 py-0.5 rounded text-[10px] bg-red-950 text-red-400 border border-red-900 font-bold">EXCEEDS</span>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4: Dhamra -->
+                  <tr id="row-Dhamra" class="hover:bg-slate-800/40 transition">
+                    <td class="py-2.5 px-3 font-semibold text-slate-200 flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                      <span>Dhamra</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-right font-bold text-cyan-400">18.0 m</td>
+                    <td class="py-2.5 px-3 text-right text-slate-300">315 m</td>
+                    <td class="py-2.5 px-3 text-center" id="weather-Dhamra">
+                      <span class="text-cyan-300 font-bold">0.9m</span> <span class="text-slate-500">•</span> <span class="text-slate-300">18 km/h</span>
+                    </td>
+                    <td class="py-2.5 px-3 text-center" id="badge-Dhamra">
+                      <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-900 font-bold">SAFE</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bottom Notice -->
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+            <span>Hydrographic Datum: CD (Chart Datum)</span>
+            <span>Source: Ministry of Ports, Shipping and Waterways</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- CHUNK 2: STRATEGY ENGINE & OPERATIONAL DELAY INTELLIGENCE                 -->
+      <!-- ========================================================================= -->
+      <section id="chunk2Section" class="mt-14 pt-8 border-t border-slate-800 relative">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4">
+          <div>
+            <div class="flex items-center space-x-2 text-xs font-mono text-cyan-400 tracking-wider uppercase mb-1">
+              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              <span>CHUNK 2 // STRATEGY ENGINE &amp; OPERATIONAL DELAY INTELLIGENCE</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+              Port Delay Analytics &amp; Steel Plant Stockpile Resilience
+            </h2>
+            <p class="text-sm text-slate-400 mt-1 max-w-2xl">
+              Turnaround forecasting in operational hours, blast furnace starvation risk prevention, and auto-diversion routing.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <span id="chunk2StatusBadge" class="px-3 py-1.5 rounded-full text-xs font-mono bg-slate-800 text-slate-400 border border-slate-700 flex items-center space-x-1.5">
+              <span id="chunk2StatusIcon">🔒</span>
+              <span id="chunk2StatusText">LOCKED (EXECUTE GATEKEEPER VALIDATION FIRST)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Locked Overlay Warning / Teaser -->
+        <div id="chunk2LockOverlay" class="p-6 rounded-2xl bg-marine-950/80 border border-slate-800 text-center py-10 mb-8 backdrop-blur-sm">
+          <div class="w-12 h-12 rounded-full bg-slate-900 mx-auto flex items-center justify-center text-xl mb-3 border border-slate-700">
+            🔒
+          </div>
+          <h3 class="text-base font-bold text-slate-200 mb-1">Operational Strategy Engine Inactive</h3>
+          <p class="text-xs text-slate-400 max-w-md mx-auto mb-4">
+            Click <strong>"RUN PHYSICAL SAFETY VALIDATION"</strong> in Chunk 1 above to execute hydrodynamic clearance and unlock live port delay calculations, stockpile runway modeling, and diversion routes.
+          </p>
+          <a href="#gatekeeperSection" class="inline-flex items-center space-x-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 font-bold bg-slate-900 px-4 py-2 rounded-xl border border-slate-700 transition">
+            <span>Go to Chunk 1 Gatekeeper ➔</span>
+          </a>
+        </div>
+
+        <!-- Main Chunk 2 Tactical Content (Revealed upon Validation) -->
+        <div id="chunk2Content" class="space-y-8 hidden">
+          
+          <!-- TOP GRID: PREDICTED PORT DELAY CARD & STEEL PLANT STOCKPILE RUNWAY -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- 1. PREDICTED PORT DELAY CARD (Light-Themed Tactical Card) (lg:col-span-6) -->
+            <div class="lg:col-span-6 bg-slate-50 text-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xl flex flex-col justify-between">
+              <div>
+                <!-- Card Header -->
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-lg">⏱️</span>
+                    <div>
+                      <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase font-bold block">OPERATIONAL DELAY ENGINE</span>
+                      <h3 class="text-base font-extrabold text-slate-900">
+                        PREDICTED PORT DELAY CARD
+                      </h3>
+                    </div>
+                  </div>
+                  <span id="delayTargetPortBadge" class="text-xs font-mono bg-slate-900 text-cyan-300 px-2.5 py-1 rounded-lg font-bold">
+                    VISAKHAPATNAM (VIZAG)
+                  </span>
+                </div>
+
+                <!-- Primary Operational Turnaround Metric -->
+                <div class="bg-white rounded-xl p-4 border border-slate-200 mb-5 shadow-sm text-center">
+                  <div class="text-[11px] font-mono uppercase tracking-wider text-slate-500 font-semibold mb-1">
+                    TOTAL PREDICTED PORT TURNAROUND
+                  </div>
+                  <div class="flex items-baseline justify-center space-x-2">
+                    <span id="totalDelayDaysVal" class="text-4xl sm:text-5xl font-black font-mono text-cyan-700">6.4</span>
+                    <span class="text-lg font-bold text-slate-700 font-mono">DAYS</span>
+                    <span class="text-slate-400 font-mono">/</span>
+                    <span id="totalDelayHoursVal" class="text-2xl font-bold text-slate-800 font-mono">152.7</span>
+                    <span class="text-xs font-semibold text-slate-500 font-mono">HOURS</span>
+                  </div>
+                  <div class="text-[10px] font-mono text-slate-500 mt-1">
+                    Strictly Operational Delay (No Financial Demurrage Rates Applied)
+                  </div>
+                </div>
+
+                <!-- 4 Delay Factor Breakdown Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4 text-center">
+                  <!-- Factor 1: Queue -->
+                  <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-mono text-slate-500 uppercase font-bold block">Queue Wait</span>
+                    <div id="delayQueueHours" class="text-base font-black font-mono text-slate-900 mt-0.5">96.0h</div>
+                    <span id="delayQueueCountLabel" class="text-[10px] font-mono text-amber-600 font-bold block">4 Vessels</span>
+                  </div>
+
+                  <!-- Factor 2: Discharge -->
+                  <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-mono text-slate-500 uppercase font-bold block">Discharge</span>
+                    <div id="delayDischargeHours" class="text-base font-black font-mono text-slate-900 mt-0.5">56.7h</div>
+                    <span id="delayDischargeRateLabel" class="text-[10px] font-mono text-slate-600 block">1,500 MT/h</span>
+                  </div>
+
+                  <!-- Factor 3: Environmental Halt -->
+                  <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-mono text-slate-500 uppercase font-bold block">Weather Halt</span>
+                    <div id="delayWeatherHours" class="text-base font-black font-mono text-slate-900 mt-0.5">0.0h</div>
+                    <span id="delayWeatherStatusLabel" class="text-[10px] font-mono text-emerald-600 font-bold block">Calm (&lt;2.5m)</span>
+                  </div>
+
+                  <!-- Factor 4: Tidal Window -->
+                  <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-mono text-slate-500 uppercase font-bold block">Tidal Lock</span>
+                    <div id="delayTidalHours" class="text-base font-black font-mono text-slate-900 mt-0.5">0.0h</div>
+                    <span id="delayTidalStatusLabel" class="text-[10px] font-mono text-slate-500 block">Deepwater CD</span>
+                  </div>
+                </div>
+
+                <!-- Explanation Formula Bar -->
+                <div class="text-[11px] font-mono text-slate-600 bg-slate-100 p-2.5 rounded-lg border border-slate-200 flex items-center justify-between">
+                  <span>Queue (<span id="calcQueueText">96h</span>) + Unload (<span id="calcDischargeText">56.7h</span>) + Weather (<span id="calcWeatherText">0h</span>) + Tide (<span id="calcTidalText">0h</span>)</span>
+                  <strong class="text-slate-900 font-bold">= <span id="calcTotalText">152.7 hrs</span></strong>
+                </div>
+              </div>
+
+              <!-- Card Footer Note -->
+              <div class="pt-3 mt-4 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>BERTH DISCHARGE CAPACITY: 85,000 MT</span>
+                <span>MAJOR PORT CONGESTION INDEX: 0.78</span>
+              </div>
+            </div>
+
+            <!-- 2. STEEL PLANT STOCKPILE RUNWAY MODULE (Light-Themed Tactical Card) (lg:col-span-6) -->
+            <div class="lg:col-span-6 bg-slate-50 text-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xl flex flex-col justify-between">
+              <div>
+                <!-- Card Header -->
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-lg">🏭</span>
+                    <div>
+                      <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase font-bold block">MINISTRY OF STEEL // RAW MATERIAL RUNWAY</span>
+                      <h3 class="text-base font-extrabold text-slate-900">
+                        STEEL PLANT STOCKPILE RUNWAY MODULE
+                      </h3>
+                    </div>
+                  </div>
+                  <span class="text-[10px] font-mono bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-bold">
+                    SAIL / RINL
+                  </span>
+                </div>
+
+                <!-- Plant Selector Dropdown -->
+                <div class="mb-4">
+                  <label for="targetSteelPlantSelect" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Target Steel Plant Destination
+                  </label>
+                  <div class="relative">
+                    <select id="targetSteelPlantSelect" onchange="onSteelPlantChange()" class="w-full bg-white border border-slate-300 focus:border-cyan-600 text-slate-900 font-bold rounded-xl px-4 py-2.5 text-sm appearance-none outline-none shadow-sm cursor-pointer">
+                      <option value="Rourkela" selected>Rourkela Steel Plant (SAIL) - Odisha [Burn: 14,000 MT/day]</option>
+                      <option value="Bokaro">Bokaro Steel Plant (SAIL) - Jharkhand [Burn: 18,000 MT/day]</option>
+                      <option value="VizagSteel">Visakhapatnam Steel Plant (RINL) - AP [Burn: 12,000 MT/day]</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                      ▼
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Inventory Slider & Consumption Stats -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-4 space-y-3">
+                  <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="text-slate-600 font-bold">Current Plant Inventory (MT):</span>
+                    <strong id="plantStockLabel" class="text-base font-black text-cyan-700">110,000 MT</strong>
+                  </div>
+                  <input type="range" id="plantStockSlider" min="15000" max="250000" step="5000" value="110000" oninput="onPlantStockSliderChange()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cyan-600">
+                  <div class="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                    <span>Min: 15K MT (Shutdown Imminent)</span>
+                    <span>Daily Burn Rate: <strong id="dailyBurnLabel" class="text-slate-800">14,000 MT/day</strong></span>
+                  </div>
+                </div>
+
+                <!-- Stockpile Runway Calculation & Progress Bars -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3 mb-4">
+                  <div class="flex items-center justify-between text-xs font-mono">
+                    <span class="text-slate-600 uppercase font-semibold">Plant Stock Capacity (In Days):</span>
+                    <span id="runwayDaysText" class="text-xl font-black text-slate-900 font-mono">7.9 Days</span>
+                  </div>
+
+                  <!-- Progress Bar: Runway -->
+                  <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden p-0.5 border border-slate-300">
+                    <div id="runwayProgressBar" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 52%;"></div>
+                  </div>
+
+                  <!-- Comparative Cargo Arrival Timeline -->
+                  <div class="flex items-center justify-between text-xs font-mono pt-1">
+                    <span class="text-slate-600">Total Cargo Arrival Time:</span>
+                    <span id="cargoArrivalDaysText" class="font-bold text-slate-800 font-mono">10.4 Days</span>
+                  </div>
+                  <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-300">
+                    <div id="cargoArrivalProgressBar" class="h-full bg-cyan-600 rounded-full transition-all duration-300" style="width: 69%;"></div>
+                  </div>
+                </div>
+
+                <!-- 3-Step Visual Math Summary Box -->
+                <div id="mathSummaryBox" class="bg-slate-100 rounded-xl border border-slate-200 p-4 mb-4 space-y-2">
+                  <div class="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-2">HOW IT WORKS — SIMPLE MATH</div>
+                  <div class="flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-5 h-5 rounded-full bg-cyan-100 border border-cyan-300 flex items-center justify-center text-[10px] font-black text-cyan-700 shrink-0">1</span>
+                      <span class="text-slate-700 font-semibold">Stock Lasts For</span>
+                    </div>
+                    <span id="mathStockLasts" class="font-black text-slate-900 font-mono text-sm">7.9 Days</span>
+                  </div>
+                  <div class="flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-5 h-5 rounded-full bg-cyan-100 border border-cyan-300 flex items-center justify-center text-[10px] font-black text-cyan-700 shrink-0">2</span>
+                      <span class="text-slate-700 font-semibold">Delivery Arrives In</span>
+                    </div>
+                    <span id="mathDeliveryArrives" class="font-black text-slate-900 font-mono text-sm">5.2 Days</span>
+                  </div>
+                  <div class="border-t border-slate-300 pt-2 flex items-center justify-between text-xs">
+                    <div class="flex items-center space-x-2">
+                      <span id="mathStep3Icon" class="w-5 h-5 rounded-full bg-emerald-100 border border-emerald-400 flex items-center justify-center text-[10px] font-black text-emerald-700 shrink-0">3</span>
+                      <span class="text-slate-700 font-semibold">Safety Buffer (Extra Days Stocked)</span>
+                    </div>
+                    <span id="mathMargin" class="font-black text-emerald-700 font-mono text-sm">+2.7 Days ✓</span>
+                  </div>
+                </div>
+
+                <!-- Emergency Alert / Status Banner -->
+                <div id="stockpileAlertBanner" class="p-3.5 rounded-xl border text-xs leading-relaxed transition-all duration-300">
+                  <!-- Dynamically rendered: Emergency Alert (Red) or Buffer Safe (Green) -->
+                </div>
+              </div>
+
+              <!-- Card Footer Note -->
+              <div class="pt-3 mt-4 border-t border-slate-200 flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <span>RAIL NETWORK: INDIAN RAILWAYS (SER / ECoR)</span>
+                <span>BLAST FURNACE SAFETY PROTOCOL: MOSP-BF-01</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- BOTTOM SECTION: AUTO-DIVERSION STRATEGY ENGINE -->
+          <div class="bg-slate-50 text-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xl space-y-6">
+            
+            <!-- Diversion Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+              <div class="flex items-center space-x-2.5">
+                <span class="text-xl">🔀</span>
+                <div>
+                  <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase font-bold block">TACTICAL REROUTING INTELLIGENCE</span>
+                  <h3 class="text-lg font-extrabold text-slate-900">
+                    AUTO-DIVERSION STRATEGY &amp; MULTI-PORT OPTIMIZATION
+                  </h3>
+                </div>
+              </div>
+              <span id="diversionStatusTag" class="text-xs font-mono bg-cyan-900 text-cyan-200 px-3 py-1 rounded-full font-bold self-start sm:self-auto">
+                EVALUATING 4 HARBORS
+              </span>
+            </div>
+
+            <!-- Optimal Recommendation Banner Card -->
+            <div id="optimalPortCard" class="p-4 sm:p-5 rounded-xl border bg-white shadow-sm transition-all duration-300">
+              <!-- Dynamically populated with optimal port recommendation -->
+            </div>
+
+            <!-- Multi-Port Turnaround Comparative Matrix Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs font-mono bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                <thead>
+                  <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 uppercase">
+                    <th class="py-3 px-4">Discharge Port</th>
+                    <th class="py-3 px-3 text-center">Vessels Queued</th>
+                    <th class="py-3 px-3 text-right">Unloading Speed</th>
+                    <th class="py-3 px-3 text-right">Port Turnaround</th>
+                    <th class="py-3 px-3 text-right">Rail to Plant</th>
+                    <th class="py-3 px-3 text-right font-black">Total Delivery</th>
+                    <th class="py-3 px-4 text-center">Strategic Recommendation</th>
+                  </tr>
+                </thead>
+                <tbody id="multiPortMatrixBody" class="divide-y divide-slate-200">
+                  <!-- Injected dynamically via calculateChunk2Strategy() -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Module A, B, C Drawer Triggers Integrated Below -->
+            <div class="pt-2 border-t border-slate-200">
+              <div class="flex items-center justify-between text-xs font-mono text-slate-500 mb-3">
+                <span class="font-bold text-slate-700">OPTIMIZATION &amp; RISK STRATEGY MODULES:</span>
+                <span>SIH 2026 Strategic Decision Engines</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <button type="button" onclick="openModuleModal('A')" class="p-3.5 rounded-xl bg-white border border-slate-200 hover:border-cyan-500 hover:shadow-md text-left transition group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-mono text-cyan-700 font-bold">MODULE A</span>
+                    <span class="text-slate-400 group-hover:text-cyan-700 transition">➔</span>
+                  </div>
+                  <div class="text-xs font-bold text-slate-900">Peak Season Stockpiling Engine</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Holding cost vs spot spike &amp; congestion risk</div>
+                </button>
+
+                <button type="button" onclick="openModuleModal('B')" class="p-3.5 rounded-xl bg-white border border-slate-200 hover:border-amber-500 hover:shadow-md text-left transition group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-mono text-amber-700 font-bold">MODULE B</span>
+                    <span class="text-slate-400 group-hover:text-amber-700 transition">➔</span>
+                  </div>
+                  <div class="text-xs font-bold text-slate-900">12-Month Chronological Risk Curve</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Monsoon swells, demurrage &amp; rake availability</div>
+                </button>
+
+                <button type="button" onclick="openModuleModal('C')" class="p-3.5 rounded-xl bg-white border border-slate-200 hover:border-indigo-500 hover:shadow-md text-left transition group">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-[10px] font-mono text-indigo-700 font-bold">MODULE C</span>
+                    <span class="text-slate-400 group-hover:text-indigo-700 transition">➔</span>
+                  </div>
+                  <div class="text-xs font-bold text-slate-900">Inter-PSU Co-Loading Scanner &amp; AIS Map</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Joint chartering, NLP-M match &amp; live satellite radar</div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </section>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 3. DECISION MODAL / POP-UP CARD                                           -->
+  <!-- ========================================================================= -->
+  <div id="decisionModal" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4 transition-opacity duration-300">
+    <div id="decisionModalCard" class="relative w-full max-w-lg rounded-2xl p-6 sm:p-8 border shadow-2xl transform scale-95 transition-transform duration-300 bg-marine-950 text-white">
+      
+      <!-- Close Button -->
+      <button onclick="closeDecisionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2 rounded-lg bg-slate-900/80 border border-slate-800 transition">
+        ✕
+      </button>
+
+      <!-- Modal Header Icon & Status Banner -->
+      <div id="modalHeaderStatus" class="mb-4">
+        <!-- Dynamically rendered: Rejection (Red) or Approval (Green) -->
+      </div>
+
+      <!-- Detail Box -->
+      <div id="modalDetailBox" class="p-4 rounded-xl border mb-4 font-mono text-xs sm:text-sm leading-relaxed">
+        <!-- Injected detail explanation -->
+      </div>
+
+      <!-- Recommendation Box -->
+      <div id="modalRecommendationBox" class="p-4 rounded-xl border mb-6 text-xs sm:text-sm leading-relaxed">
+        <!-- Injected recommendations or next steps -->
+      </div>
+
+      <!-- Modal Footer Action Buttons -->
+      <div id="modalFooterActions" class="flex flex-col sm:flex-row items-center gap-3">
+        <!-- Injected action buttons -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Tactical Module Drawer / Modal -->
+  <div id="moduleDrawer" class="fixed inset-0 z-50 modal-backdrop hidden flex items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl max-h-[92vh] overflow-y-auto bg-marine-950 rounded-2xl p-6 sm:p-8 border border-cyan-500/40 text-white shadow-2xl custom-scrollbar">
+      <button onclick="closeModuleModal()" class="sticky top-0 float-right z-10 text-slate-400 hover:text-white p-2 rounded-lg bg-slate-900/90 border border-slate-700 backdrop-blur transition shadow-md">
+        ✕
+      </button>
+      <div id="moduleDrawerContent" class="clear-both pt-1">
+        <!-- Dynamic module details -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="mt-20 border-t border-slate-800/80 bg-marine-950/80 py-8 text-center text-xs font-mono text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="text-slate-400 font-semibold">NaviSteel Control Tower</span> • Ministry of Steel, Govt. of India
+      </div>
+      <div>
+        Smart India Hackathon (SIH 2026) Prototype • Built by <strong class="text-cyan-400">Team Tensor Tactics</strong>
+      </div>
+      <div>
+        Hydrodynamics Standard: PIANC Guidelines • WGS84 Datum
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: WEB AUDIO API & HYDRODYNAMIC VALIDATION ENGINE               -->
+  <!-- ========================================================================= -->
+  <script>
+    // --- PORT SPECIFICATIONS & GPS COORDINATES REGISTRY ---
+    const PORT_SPECS = {
+      Vizag: {
+        name: "Visakhapatnam (Vizag) Port",
+        shortName: "Vizag",
+        code: "IN-VTZ",
+        lat: 17.68,
+        lon: 83.21,
+        maxDraft: 14.5,
+        maxLoa: 280,
+        berthCapacity: "120,000 MT",
+        type: "Outer Deepwater Harbour",
+        queueCount: 4,
+        queueWaitPerVesselHours: 24.0, // 4 * 24h = 96h queue wait
+        unloadingRate: 1500, // MT/hr
+        tidalPenalty: 0.0,
+        wave: 1.1,
+        wind: 16,
+        isWeatherLive: false,
+        lastFetched: null
+      },
+      Paradip: {
+        name: "Paradip Deep Water Port",
+        shortName: "Paradip",
+        code: "IN-PRT",
+        lat: 20.26,
+        lon: 86.67,
+        maxDraft: 16.0,
+        maxLoa: 300,
+        berthCapacity: "125,000 MT",
+        type: "Deep Water Mechanized Coal Berth",
+        queueCount: 1,
+        queueWaitPerVesselHours: 18.0, // 1 * 18h = 18h queue wait
+        unloadingRate: 2500, // MT/hr
+        tidalPenalty: 0.0,
+        wave: 1.1,
+        wind: 20,
+        isWeatherLive: false,
+        lastFetched: null
+      },
+      Haldia: {
+        name: "Haldia Dock Complex",
+        shortName: "Haldia",
+        code: "IN-HAL",
+        lat: 22.02,
+        lon: 88.06,
+        maxDraft: 8.5,
+        maxLoa: 220,
+        berthCapacity: "45,000 MT",
+        type: "Riverine Lock Basin (Hooghly)",
+        queueCount: 2,
+        queueWaitPerVesselHours: 20.0, // 2 * 20h = 40h queue wait
+        unloadingRate: 1000, // MT/hr
+        tidalPenalty: 12.0, // Riverine tidal lock window penalty (+12h if draft > 7.5m)
+        wave: 0.2,
+        wind: 12,
+        isWeatherLive: false,
+        lastFetched: null
+      },
+      Dhamra: {
+        name: "Dhamra Deep Draft Port",
+        shortName: "Dhamra",
+        code: "IN-DHM",
+        lat: 20.79,
+        lon: 86.91,
+        maxDraft: 18.0,
+        maxLoa: 315,
+        berthCapacity: "180,000 MT",
+        type: "Ultra-Deepwater Bulk Terminal",
+        queueCount: 0,
+        queueWaitPerVesselHours: 0.0, // 0 vessels queued = 0h wait
+        unloadingRate: 3000, // MT/hr
+        tidalPenalty: 0.0,
+        wave: 0.9,
+        wind: 18,
+        isWeatherLive: false,
+        lastFetched: null
+      }
+    };
+
+    // --- STEEL PLANT DESTINATIONS REGISTRY (MINISTRY OF STEEL // SAIL & RINL) ---
+    const STEEL_PLANTS = {
+      Rourkela: {
+        name: "Rourkela Steel Plant (SAIL) - Odisha",
+        shortName: "Rourkela (SAIL)",
+        operator: "Steel Authority of India Limited (SAIL)",
+        dailyBurnRate: 14000, // MT/day
+        defaultStock: 110000, // MT
+        minStock: 15000,
+        maxStock: 250000,
+        railNetwork: "SER (South Eastern Railway)",
+        railTransitDays: {
+          Vizag: 2.5,
+          Paradip: 1.2,
+          Haldia: 2.2,
+          Dhamra: 1.0
+        }
+      },
+      Bokaro: {
+        name: "Bokaro Steel Plant (SAIL) - Jharkhand",
+        shortName: "Bokaro (SAIL)",
+        operator: "Steel Authority of India Limited (SAIL)",
+        dailyBurnRate: 18000, // MT/day
+        defaultStock: 135000, // MT
+        minStock: 20000,
+        maxStock: 300000,
+        railNetwork: "SER / ECR (East Central Railway)",
+        railTransitDays: {
+          Vizag: 3.0,
+          Paradip: 2.0,
+          Haldia: 1.5,
+          Dhamra: 1.8
+        }
+      },
+      VizagSteel: {
+        name: "Visakhapatnam Steel Plant (RINL) - AP",
+        shortName: "Vizag Steel (RINL)",
+        operator: "Rashtriya Ispat Nigam Limited (RINL)",
+        dailyBurnRate: 12000, // MT/day
+        defaultStock: 80000, // MT
+        minStock: 12000,
+        maxStock: 200000,
+        railNetwork: "ECoR (East Coast Railway)",
+        railTransitDays: {
+          Vizag: 0.5,
+          Paradip: 2.2,
+          Haldia: 3.2,
+          Dhamra: 2.6
+        }
+      }
+    };
+
+    const COASTAL_SEA_TRANSIT_DAYS = 1.5; // Estimated coastal approach and berthing transit window
+
+    // --- WEB AUDIO SYNTHESIS ENGINE ---
+    let audioCtx = null;
+    let isAudioMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    // Synthesizes a 150Hz low-frequency error buzzer via Web Audio API
+    function playErrorBuzzer() {
+      if (isAudioMuted) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(130, now + 0.55);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(450, now);
+
+        gainNode.gain.setValueAtTime(0.001, now);
+        gainNode.gain.linearRampToValueAtTime(0.35, now + 0.04);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+        osc.connect(filter);
+        filter.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.65);
+      } catch (err) {
+        console.warn("AudioContext error: ", err);
+      }
+    }
+
+    // Synthesizes a crisp 523Hz (C5) and 659Hz (E5) double-chime tone via Web Audio API
+    function playApprovalChime() {
+      if (isAudioMuted) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+
+        const now = audioCtx.currentTime;
+
+        // Tone 1: 523Hz (C5)
+        const osc1 = audioCtx.createOscillator();
+        const gain1 = audioCtx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(523.25, now);
+
+        gain1.gain.setValueAtTime(0.001, now);
+        gain1.gain.linearRampToValueAtTime(0.28, now + 0.03);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+        osc1.connect(gain1);
+        gain1.connect(audioCtx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.55);
+
+        // Tone 2: 659Hz (E5) delayed by 140ms
+        const osc2 = audioCtx.createOscillator();
+        const gain2 = audioCtx.createGain();
+        const t2 = now + 0.14;
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(659.25, t2);
+
+        gain2.gain.setValueAtTime(0.001, t2);
+        gain2.gain.linearRampToValueAtTime(0.32, t2 + 0.03);
+        gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.7);
+
+        osc2.connect(gain2);
+        gain2.connect(audioCtx.destination);
+        osc2.start(t2);
+        osc2.stop(t2 + 0.75);
+      } catch (err) {
+        console.warn("AudioContext error: ", err);
+      }
+    }
+
+    function toggleAudioEngine() {
+      isAudioMuted = !isAudioMuted;
+      const label = document.getElementById("soundStatusLabel");
+      const icon = document.getElementById("soundIconOn");
+      if (isAudioMuted) {
+        label.innerText = "AUDIO: OFF";
+        label.classList.add("text-slate-500");
+      } else {
+        label.innerText = "AUDIO: ON";
+        label.classList.remove("text-slate-500");
+        initAudio();
+        playApprovalChime();
+      }
+    }
+
+    function previewAudioFeedback() {
+      initAudio();
+      playApprovalChime();
+      setTimeout(() => {
+        playErrorBuzzer();
+      }, 1000);
+    }
+
+    // --- DYNAMIC OPEN-METEO WEATHER INTEGRATION ---
+    async function fetchOpenMeteoWeather(portKey) {
+      const port = PORT_SPECS[portKey];
+      if (!port) return;
+
+      const spinner = document.getElementById("refreshSpinner");
+      if (spinner) spinner.classList.add("animate-spin");
+
+      try {
+        const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${port.lat}&longitude=${port.lon}&current=wave_height`;
+        const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${port.lat}&longitude=${port.lon}&current=wind_speed_10m,wind_gusts_10m`;
+
+        const [marineRes, forecastRes] = await Promise.all([
+          fetch(marineUrl).catch(() => null),
+          fetch(forecastUrl).catch(() => null)
+        ]);
+
+        if (marineRes && marineRes.ok) {
+          const marineData = await marineRes.json();
+          if (marineData.current && marineData.current.wave_height !== null && marineData.current.wave_height !== undefined) {
+            port.wave = Math.max(0.1, parseFloat(marineData.current.wave_height));
+          }
+        }
+
+        if (forecastRes && forecastRes.ok) {
+          const forecastData = await forecastRes.json();
+          if (forecastData.current && forecastData.current.wind_speed_10m !== null && forecastData.current.wind_speed_10m !== undefined) {
+            port.wind = parseFloat(forecastData.current.wind_speed_10m);
+          }
+        }
+
+        port.isWeatherLive = true;
+        port.lastFetched = new Date();
+      } catch (err) {
+        console.warn(`Weather fetch failed for ${portKey}, using calibrated sensor values`, err);
+      } finally {
+        if (spinner) spinner.classList.remove("animate-spin");
+      }
+    }
+
+    async function fetchAllPortsWeather() {
+      await Promise.all(Object.keys(PORT_SPECS).map(k => fetchOpenMeteoWeather(k)));
+      updateTableWeather();
+      syncActivePortWeatherUI();
+      updateLiveComparison();
+    }
+
+    async function refreshCurrentPortWeather(manualFeedback = false) {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      await fetchOpenMeteoWeather(selectedPortKey);
+      syncActivePortWeatherUI();
+      updateTableWeather();
+      updateLiveComparison();
+
+      if (manualFeedback) {
+        initAudio();
+        playApprovalChime();
+      }
+    }
+
+    function syncActivePortWeatherUI() {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const port = PORT_SPECS[selectedPortKey];
+      if (!port) return;
+
+      // 1. Title the card dynamically: "LIVE WEATHER: [Selected Port Name] Approach Route"
+      const titleEl = document.getElementById("weatherCardTitle");
+      if (titleEl) {
+        titleEl.innerText = `LIVE WEATHER: ${port.name} Approach Route`;
+      }
+
+      // 2. Update GPS coordinates label
+      const coordsEl = document.getElementById("weatherCoordsLabel");
+      if (coordsEl) {
+        coordsEl.innerText = `LAT: ${port.lat.toFixed(2)}° N • LON: ${port.lon.toFixed(2)}° E`;
+      }
+
+      // 3. Update input slider values & labels
+      document.getElementById("waveHeight").value = port.wave.toFixed(1);
+      document.getElementById("windSpeed").value = Math.round(port.wind);
+      document.getElementById("waveValLabel").innerText = port.wave.toFixed(1) + "m";
+      document.getElementById("windValLabel").innerText = Math.round(port.wind) + " km/h";
+
+      updateWeatherSafetyTags(port.wave, port.wind);
+    }
+
+    function onManualWeatherChange() {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const port = PORT_SPECS[selectedPortKey];
+      
+      const wave = parseFloat(document.getElementById("waveHeight").value);
+      const wind = parseFloat(document.getElementById("windSpeed").value);
+
+      if (port) {
+        port.wave = wave;
+        port.wind = wind;
+      }
+
+      document.getElementById("waveValLabel").innerText = wave.toFixed(1) + "m";
+      document.getElementById("windValLabel").innerText = Math.round(wind) + " km/h";
+
+      updateWeatherSafetyTags(wave, wind);
+      updateTableWeather();
+      updateLiveComparison();
+    }
+
+    function updateWeatherSafetyTags(wave, wind) {
+      const badge = document.getElementById("weatherStatusBadge");
+      const waveTag = document.getElementById("waveSafetyTag");
+      const windTag = document.getElementById("windSafetyTag");
+
+      const waveExceeded = wave > 2.5;
+      const windExceeded = wind > 40;
+
+      if (waveTag) {
+        waveTag.innerText = waveExceeded ? "EXCEEDED (>2.5m)" : "SAFE (≤2.5m)";
+        waveTag.className = waveExceeded ? "text-red-400 font-bold" : "text-emerald-400 font-bold";
+      }
+
+      if (windTag) {
+        windTag.innerText = windExceeded ? "EXCEEDED (>40k)" : "SAFE (≤40k)";
+        windTag.className = windExceeded ? "text-red-400 font-bold" : "text-emerald-400 font-bold";
+      }
+
+      if (badge) {
+        if (waveExceeded || windExceeded) {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-950 text-red-400 border border-red-800 animate-pulse";
+          badge.innerText = waveExceeded ? "WEATHER HAZARD: ROUGH SWELL" : "WEATHER HAZARD: HIGH GALE";
+        } else {
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
+          badge.innerText = "CALM SEA STATE";
+        }
+      }
+    }
+
+    function updateTableWeather() {
+      Object.keys(PORT_SPECS).forEach(key => {
+        const p = PORT_SPECS[key];
+        const cell = document.getElementById("weather-" + key);
+        if (cell) {
+          const isWaveSafe = p.wave <= 2.5;
+          const isWindSafe = p.wind <= 40;
+          const waveColor = isWaveSafe ? "text-cyan-300 font-bold" : "text-red-400 font-bold";
+          const windColor = isWindSafe ? "text-slate-300" : "text-red-400 font-bold";
+          cell.innerHTML = `<span class="${waveColor}">${p.wave.toFixed(1)}m</span> <span class="text-slate-500">•</span> <span class="${windColor}">${Math.round(p.wind)} km/h</span>`;
+        }
+      });
+    }
+
+    // --- UI REACTIVE STATE & COMPARISONS ---
+    async function onPortSelectChange() {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const specs = PORT_SPECS[selectedPortKey];
+      if (!specs) return;
+
+      // Update Spotlight Card
+      document.getElementById("spotlightPortName").innerText = specs.name;
+      document.getElementById("spotlightPortCode").innerText = specs.code;
+      document.getElementById("spotlightMaxDraft").innerText = specs.maxDraft.toFixed(1) + " m";
+      document.getElementById("spotlightMaxLoa").innerText = specs.maxLoa + " m";
+
+      // Highlight corresponding row in table
+      Object.keys(PORT_SPECS).forEach(key => {
+        const row = document.getElementById("row-" + key);
+        if (row) {
+          if (key === selectedPortKey) {
+            row.classList.add("bg-cyan-950/50", "border-l-4", "border-cyan-400");
+          } else {
+            row.classList.remove("bg-cyan-950/50", "border-l-4", "border-cyan-400");
+          }
+        }
+      });
+
+      // Fetch live Open-Meteo data for this port and sync UI
+      await fetchOpenMeteoWeather(selectedPortKey);
+      syncActivePortWeatherUI();
+      updateTableWeather();
+      updateLiveComparison();
+
+      // Background fetch all ports to keep alternatives up-to-date
+      fetchAllPortsWeather();
+    }
+
+    function updateLiveComparison() {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const specs = PORT_SPECS[selectedPortKey];
+      const vesselDraft = parseFloat(document.getElementById("vesselDraft").value) || 0;
+      const vesselLoa = parseFloat(document.getElementById("vesselLoa").value) || 0;
+
+      document.getElementById("draftFeedback").innerText = `Current: ${vesselDraft.toFixed(1)}m`;
+
+      // Update gauge
+      const ratio = (vesselDraft / specs.maxDraft) * 100;
+      const gaugeBar = document.getElementById("gaugeBar");
+      const statusText = document.getElementById("gaugeStatusText");
+
+      gaugeBar.style.width = Math.min(ratio, 100) + "%";
+
+      if (vesselDraft > specs.maxDraft) {
+        const delta = (vesselDraft - specs.maxDraft).toFixed(1);
+        statusText.innerText = `EXCEEDED BY ${delta}m`;
+        statusText.className = "font-bold text-red-400";
+        gaugeBar.className = "h-full bg-red-500 rounded-full transition-all duration-300";
+      } else {
+        const margin = (specs.maxDraft - vesselDraft).toFixed(1);
+        statusText.innerText = `CLEARANCE MARGIN +${margin}m`;
+        statusText.className = "font-bold text-emerald-400";
+        gaugeBar.className = "h-full bg-emerald-500 rounded-full transition-all duration-300";
+      }
+
+      // Update table badges (checks both physical specs and live port weather!)
+      Object.keys(PORT_SPECS).forEach(key => {
+        const p = PORT_SPECS[key];
+        const badge = document.getElementById("badge-" + key);
+        if (!badge) return;
+
+        const draftOk = vesselDraft <= p.maxDraft;
+        const loaOk = vesselLoa <= p.maxLoa;
+        const weatherOk = p.wave <= 2.5 && p.wind <= 40;
+
+        if (draftOk && loaOk && weatherOk) {
+          badge.innerHTML = `<span class="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-900 font-bold">SAFE</span>`;
+        } else if (!draftOk) {
+          badge.innerHTML = `<span class="px-2 py-0.5 rounded text-[10px] bg-red-950 text-red-400 border border-red-900 font-bold">DRAFT LIMIT</span>`;
+        } else if (!loaOk) {
+          badge.innerHTML = `<span class="px-2 py-0.5 rounded text-[10px] bg-red-950 text-red-400 border border-red-900 font-bold">LOA LIMIT</span>`;
+        } else {
+          badge.innerHTML = `<span class="px-2 py-0.5 rounded text-[10px] bg-orange-950 text-orange-400 border border-orange-900 font-bold">WEATHER HAZARD</span>`;
+        }
+      });
+
+      if (typeof isChunk2Unlocked !== 'undefined' && isChunk2Unlocked) {
+        calculateChunk2Strategy();
+      }
+    }
+
+    // --- QUICK TEST PRESET LOADER ---
+    function loadPreset(type) {
+      if (type === 'vizag_fail') {
+        document.getElementById("dischargePort").value = "Vizag";
+        document.getElementById("vesselDraft").value = 15.5;
+        document.getElementById("vesselLoa").value = 265;
+        document.getElementById("cargoQuantity").value = 85000;
+        onPortSelectChange();
+      } else if (type === 'paradip_pass') {
+        document.getElementById("dischargePort").value = "Paradip";
+        document.getElementById("vesselDraft").value = 15.5;
+        document.getElementById("vesselLoa").value = 265;
+        document.getElementById("cargoQuantity").value = 85000;
+        onPortSelectChange();
+      } else if (type === 'weather_fail') {
+        // Paradip has physical depth (16.0m > 15.5m), but storm wave creates weather rejection
+        document.getElementById("dischargePort").value = "Paradip";
+        document.getElementById("vesselDraft").value = 15.5;
+        document.getElementById("vesselLoa").value = 265;
+        document.getElementById("cargoQuantity").value = 85000;
+        onPortSelectChange().then(() => {
+          // Override wave to 3.2m (> 2.5m limit)
+          document.getElementById("waveHeight").value = 3.2;
+          document.getElementById("windSpeed").value = 46;
+          onManualWeatherChange();
+        });
+      } else if (type === 'haldia_fail') {
+        document.getElementById("dischargePort").value = "Haldia";
+        document.getElementById("vesselDraft").value = 15.5;
+        document.getElementById("vesselLoa").value = 265;
+        document.getElementById("cargoQuantity").value = 85000;
+        onPortSelectChange();
+      }
+    }
+
+    // --- RUN PHYSICAL & WEATHER SAFETY VALIDATION (GATING ENGINE) ---
+    function handleValidation(e) {
+      e.preventDefault();
+      initAudio();
+
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const portSpec = PORT_SPECS[selectedPortKey];
+      const vesselName = document.getElementById("vesselName").value.trim() || "Vessel";
+      const vesselDraft = parseFloat(document.getElementById("vesselDraft").value);
+      const vesselLoa = parseFloat(document.getElementById("vesselLoa").value);
+      const cargoQty = parseFloat(document.getElementById("cargoQuantity").value);
+
+      // Active weather inputs
+      const wave = parseFloat(document.getElementById("waveHeight").value);
+      const wind = parseFloat(document.getElementById("windSpeed").value);
+
+      // Keep active port weather synchronized
+      portSpec.wave = wave;
+      portSpec.wind = wind;
+
+      // GATING FILTER RULES:
+      // Reject IF Vessel Draft > Selected Port Max Draft OR
+      // Reject IF Vessel LOA > Selected Port Max LOA OR
+      // Reject IF Selected Port Wave Height > 2.5m OR
+      // Reject IF Selected Port Wind Speed > 40 km/h
+      const isDraftExceeded = vesselDraft > portSpec.maxDraft;
+      const isLoaExceeded = vesselLoa > portSpec.maxLoa;
+      const isWaveExceeded = wave > 2.5;
+      const isWindExceeded = wind > 40;
+
+      const isRejected = isDraftExceeded || isLoaExceeded || isWaveExceeded || isWindExceeded;
+
+      if (isRejected) {
+        playErrorBuzzer();
+        renderRejectionModal(portSpec, vesselDraft, vesselLoa, wave, wind, isDraftExceeded, isLoaExceeded, isWaveExceeded, isWindExceeded);
+        unlockChunk2(false);
+      } else {
+        playApprovalChime();
+        renderApprovalModal(portSpec, vesselName, vesselDraft, vesselLoa, cargoQty, wave, wind);
+        unlockChunk2(true);
+      }
+    }
+
+    // --- REJECTION MODAL WITH WEATHER-BASED ALTERNATIVE SUGGESTION ---
+    function renderRejectionModal(portSpec, draft, loa, wave, wind, draftFail, loaFail, waveFail, windFail) {
+      const modal = document.getElementById("decisionModal");
+      const card = document.getElementById("decisionModalCard");
+      const header = document.getElementById("modalHeaderStatus");
+      const detail = document.getElementById("modalDetailBox");
+      const rec = document.getElementById("modalRecommendationBox");
+      const actions = document.getElementById("modalFooterActions");
+
+      card.className = "relative w-full max-w-lg rounded-2xl p-6 sm:p-8 border border-red-500/60 shadow-[0_0_50px_rgba(239,68,68,0.35)] transform scale-100 transition-transform duration-300 bg-marine-950 text-white";
+
+      header.innerHTML = `
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-red-950/80 border border-red-700/60 flex items-center justify-center text-xl text-red-400">
+            ❌
+          </div>
+          <div>
+            <div class="text-[11px] font-mono tracking-widest text-red-400 font-bold uppercase">HYDRODYNAMIC &amp; WEATHER GATEKEEPER ALERT</div>
+            <h3 class="text-2xl font-black text-red-500 tracking-tight">STATUS: REJECTED</h3>
+          </div>
+        </div>
+      `;
+
+      let causes = [];
+      if (draftFail) {
+        causes.push(`DRAFT EXCEEDED: Vessel Draft (${draft.toFixed(1)}m) > Max Port Draft (${portSpec.maxDraft.toFixed(1)}m). Severe Grounding Risk!`);
+      }
+      if (loaFail) {
+        causes.push(`LOA VIOLATION: Vessel LOA (${loa}m) > Max Port Turning Basin (${portSpec.maxLoa}m). Lock entrance collision risk.`);
+      }
+      if (waveFail) {
+        causes.push(`HIGH SWELL HAZARD: Selected Port Wave Height (${wave.toFixed(1)}m) > 2.5m limit. Berthing maneuvers suspended.`);
+      }
+      if (windFail) {
+        causes.push(`GALE WARNING: Selected Port Wind Speed (${Math.round(wind)} km/h) > 40 km/h limit. Tug assistance suspended.`);
+      }
+
+      detail.className = "p-4 rounded-xl border border-red-900/60 bg-red-950/40 text-red-200 mb-4 font-mono text-xs sm:text-sm leading-relaxed";
+      detail.innerHTML = `
+        <div class="font-bold text-red-400 mb-1.5 flex items-center space-x-1.5">
+          <span>⚠️</span>
+          <span>VALIDATION FAILURES (${portSpec.name}):</span>
+        </div>
+        <ul class="list-disc list-inside space-y-1">
+          ${causes.map(c => `<li>${c}</li>`).join('')}
+        </ul>
+      `;
+
+      // WEATHER-BASED ALTERNATIVE PORT EVALUATION:
+      // Compare conditions across ALL 4 ports to find the safest alternative that meets
+      // BOTH draft depth AND has a "Calm Sea State" (Wave < 2.5m and Wind <= 40 km/h)
+      const candidatePorts = Object.keys(PORT_SPECS)
+        .filter(k => k !== portSpec.shortName)
+        .map(k => {
+          const p = PORT_SPECS[k];
+          const draftMargin = p.maxDraft - draft;
+          const loaMargin = p.maxLoa - loa;
+          const isPhysicalSafe = draftMargin >= 0 && loaMargin >= 0;
+          const isWeatherCalm = p.wave < 2.5 && p.wind <= 40;
+          return {
+            key: k,
+            port: p,
+            draftMargin,
+            isPhysicalSafe,
+            isWeatherCalm,
+            isFullyEligible: isPhysicalSafe && isWeatherCalm
+          };
+        });
+
+      // Filter to fully eligible ports meeting both depth and Calm Sea State
+      const eligiblePorts = candidatePorts
+        .filter(c => c.isFullyEligible)
+        .sort((a, b) => b.draftMargin - a.draftMargin || a.port.wave - b.port.wave);
+
+      let suggestionHtml = "";
+      if (eligiblePorts.length > 0) {
+        const best = eligiblePorts[0].port;
+        const marginStr = (best.maxDraft - draft).toFixed(1);
+        suggestionHtml = `
+          <div class="text-xs text-slate-300 mb-1.5 font-bold flex items-center space-x-1.5">
+            <span class="text-emerald-400">⚓</span>
+            <span>WEATHER-AWARE RE-ROUTING RECOMMENDATION:</span>
+          </div>
+          <div class="text-xs font-mono text-slate-200 bg-slate-900/90 p-3.5 rounded-lg border border-cyan-800/60 space-y-1.5">
+            <div class="text-sm font-bold text-cyan-300">Suggested Eligible Port: ${best.name}</div>
+            <div class="text-slate-300">• Max Draft: <strong>${best.maxDraft.toFixed(1)}m</strong> (Safe Margin: <strong>+${marginStr}m</strong>) | Max LOA: <strong>${best.maxLoa}m</strong></div>
+            <div class="text-emerald-300 flex items-center space-x-1.5">
+              <span>✓ Live Approach Wave: <strong>${best.wave.toFixed(1)}m</strong> (Calm Sea State &lt; 2.5m)</span>
+              <span class="text-slate-500">•</span>
+              <span>Wind: <strong>${Math.round(best.wind)} km/h</strong></span>
+            </div>
+            ${eligiblePorts.length > 1 ? `
+              <div class="text-[11px] text-slate-400 pt-1 border-t border-slate-800">
+                Other weather-safe alternatives: ${eligiblePorts.slice(1).map(e => `${e.port.shortName} (Draft: ${e.port.maxDraft}m, Wave: ${e.port.wave.toFixed(1)}m)`).join(', ')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        const physicalOnly = candidatePorts.filter(c => c.isPhysicalSafe);
+        if (physicalOnly.length > 0) {
+          suggestionHtml = `
+            <div class="text-xs text-orange-400 font-bold mb-1.5 flex items-center space-x-1.5">
+              <span>🌊</span>
+              <span>REGIONAL SWELL / WEATHER LOCKOUT:</span>
+            </div>
+            <div class="text-xs text-slate-300 bg-orange-950/40 p-3.5 rounded-lg border border-orange-800/60 font-mono space-y-1.5">
+              <div>Alternate deep ports (${physicalOnly.map(c => c.port.shortName).join(', ')}) have physical depth for ${draft.toFixed(1)}m, but their approach wave heights exceed the 2.5m calm sea threshold:</div>
+              <div class="text-orange-300">• ${physicalOnly.map(c => `${c.port.shortName}: ${c.port.wave.toFixed(1)}m wave`).join(' | ')}</div>
+              <div class="text-slate-400 mt-1">Recommendation: Hold at deepwater outer anchorage until weather window clears below 2.5m.</div>
+            </div>
+          `;
+        } else {
+          suggestionHtml = `
+            <div class="text-xs text-amber-300 font-bold mb-1.5 flex items-center space-x-1.5">
+              <span>⚠️</span>
+              <span>OFFSHORE LIGHTERING REQUIRED:</span>
+            </div>
+            <div class="text-xs text-slate-300 bg-amber-950/40 p-3.5 rounded-lg border border-amber-800/50 font-mono">
+              No East Coast terminal has permissible draft for ${draft.toFixed(1)}m (Dhamra maximum limit is 18.0m). Deep-water transshipment or lightering required at Bay of Bengal anchorages.
+            </div>
+          `;
+        }
+      }
+
+      rec.className = "p-4 rounded-xl border border-slate-800 bg-slate-900/70 mb-6";
+      rec.innerHTML = suggestionHtml;
+
+      actions.innerHTML = `
+        ${eligiblePorts.length > 0 ? `
+          <button onclick="applySuggestedPort('${eligiblePorts[0].key}')" class="w-full sm:w-auto flex-1 py-3 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg">
+            Switch to ${eligiblePorts[0].port.shortName} &amp; Re-validate ➔
+          </button>
+        ` : ''}
+        <button onclick="closeDecisionModal()" class="w-full sm:w-auto py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs uppercase tracking-wider transition">
+          Dismiss Alert
+        </button>
+      `;
+
+      modal.classList.remove("hidden");
+    }
+
+    // --- APPROVAL MODAL BUILDER ---
+    function renderApprovalModal(portSpec, vesselName, draft, loa, cargoQty, wave, wind) {
+      const modal = document.getElementById("decisionModal");
+      const card = document.getElementById("decisionModalCard");
+      const header = document.getElementById("modalHeaderStatus");
+      const detail = document.getElementById("modalDetailBox");
+      const rec = document.getElementById("modalRecommendationBox");
+      const actions = document.getElementById("modalFooterActions");
+
+      card.className = "relative w-full max-w-lg rounded-2xl p-6 sm:p-8 border border-emerald-500/60 shadow-[0_0_50px_rgba(16,185,129,0.35)] transform scale-100 transition-transform duration-300 bg-marine-950 text-white";
+
+      header.innerHTML = `
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-700/60 flex items-center justify-center text-xl text-emerald-400">
+            ✅
+          </div>
+          <div>
+            <div class="text-[11px] font-mono tracking-widest text-emerald-400 font-bold uppercase">DG SHIPPING CLEARANCE PASS</div>
+            <h3 class="text-2xl font-black text-emerald-400 tracking-tight">STATUS: APPROVED</h3>
+          </div>
+        </div>
+      `;
+
+      detail.className = "p-4 rounded-xl border border-emerald-900/60 bg-emerald-950/40 text-emerald-200 mb-4 font-mono text-xs sm:text-sm leading-relaxed";
+      detail.innerHTML = `
+        <div class="font-bold text-emerald-400 mb-1 flex items-center space-x-1.5">
+          <span>🛡️</span>
+          <span>PHYSICAL &amp; WEATHER CLEARANCE CONFIRMED:</span>
+        </div>
+        <div>Physical &amp; Weather Clearance Confirmed. Safe for berth allocation.</div>
+        <div class="mt-2 text-xs text-slate-300 space-y-0.5">
+          <div>• Vessel Draft: <strong>${draft.toFixed(1)}m</strong> ≤ Port Max Draft: <strong>${portSpec.maxDraft.toFixed(1)}m</strong> (Margin: +${(portSpec.maxDraft - draft).toFixed(1)}m)</div>
+          <div>• Vessel LOA: <strong>${loa}m</strong> ≤ Port Max LOA: <strong>${portSpec.maxLoa}m</strong></div>
+          <div>• Approach Route Wave: <strong>${wave.toFixed(1)}m</strong> (≤ 2.5m limit - Calm Sea State)</div>
+          <div>• Approach Route Wind: <strong>${Math.round(wind)} km/h</strong> (≤ 40 km/h safe berthing limit)</div>
+          <div>• Target Berth: <strong>${portSpec.name}</strong></div>
+        </div>
+      `;
+
+      rec.className = "p-4 rounded-xl border border-slate-800 bg-slate-900/70 mb-6";
+      rec.innerHTML = `
+        <div class="text-xs font-semibold text-cyan-300 mb-1">STRATEGIC MODULES UNLOCKED:</div>
+        <p class="text-xs text-slate-300 mb-2">
+          Clearance granted for <strong>${cargoQty.toLocaleString()} MT</strong> bulk cargo discharge. Downstream stock replenishment and freight risk hedging have been authorized below.
+        </p>
+        <div class="flex flex-wrap gap-2 text-[11px] font-mono">
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60">Module A: Stockpiling Active</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60">Module B: 12M Risk Active</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800/60">Module C: Co-Loading Ready</span>
+        </div>
+      `;
+
+      actions.innerHTML = `
+        <button onclick="scrollToModules()" class="w-full sm:w-auto flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider transition shadow-lg">
+          Explore Downstream Modules ➔
+        </button>
+        <button onclick="closeDecisionModal()" class="w-full sm:w-auto py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs uppercase tracking-wider transition">
+          Close Window
+        </button>
+      `;
+
+      modal.classList.remove("hidden");
+    }
+
+    function applySuggestedPort(portName) {
+      document.getElementById("dischargePort").value = portName;
+      onPortSelectChange().then(() => {
+        closeDecisionModal();
+        document.getElementById("validateBtn").click();
+      });
+    }
+
+    function closeDecisionModal() {
+      document.getElementById("decisionModal").classList.add("hidden");
+    }
+
+    // --- CHUNK 2: STRATEGY ENGINE & OPERATIONAL DELAY INTELLIGENCE ---
+    let isChunk2Unlocked = false;
+
+    function unlockChunk2(isApproved) {
+      isChunk2Unlocked = true;
+      const overlay = document.getElementById("chunk2LockOverlay");
+      const content = document.getElementById("chunk2Content");
+      const badge = document.getElementById("chunk2StatusBadge");
+      const icon = document.getElementById("chunk2StatusIcon");
+      const text = document.getElementById("chunk2StatusText");
+
+      if (overlay) overlay.classList.add("hidden");
+      if (content) content.classList.remove("hidden");
+
+      if (isApproved) {
+        if (badge) badge.className = "px-3 py-1.5 rounded-full text-xs font-mono bg-emerald-950 text-emerald-400 border border-emerald-700 flex items-center space-x-1.5 font-bold";
+        if (icon) icon.innerText = "🔓";
+        if (text) text.innerText = "UNLOCKED // REAL-TIME LOGISTICS INTELLIGENCE";
+      } else {
+        if (badge) badge.className = "px-3 py-1.5 rounded-full text-xs font-mono bg-amber-950 text-amber-400 border border-amber-700 flex items-center space-x-1.5 font-bold";
+        if (icon) icon.innerText = "⚠️";
+        if (text) text.innerText = "UNLOCKED // DIVERSION ENGINE ACTIVE (PORT REJECTED)";
+      }
+
+      calculateChunk2Strategy();
+    }
+
+    function unlockStrategyModules() {
+      unlockChunk2(true);
+    }
+
+    function lockStrategyModules() {
+      unlockChunk2(false);
+    }
+
+    function scrollToModules() {
+      closeDecisionModal();
+      const chunk2 = document.getElementById("chunk2Section");
+      if (chunk2) {
+        chunk2.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function onSteelPlantChange() {
+      const plantKey = document.getElementById("targetSteelPlantSelect").value;
+      const plant = STEEL_PLANTS[plantKey];
+      if (!plant) return;
+
+      const slider = document.getElementById("plantStockSlider");
+      if (slider) {
+        slider.min = plant.minStock || 15000;
+        slider.max = plant.maxStock || 250000;
+        slider.value = plant.defaultStock;
+      }
+
+      calculateChunk2Strategy();
+    }
+
+    function onPlantStockSliderChange() {
+      calculateChunk2Strategy();
+    }
+
+    function onCargoQuantityChange() {
+      if (isChunk2Unlocked) {
+        calculateChunk2Strategy();
+      }
+    }
+
+    function applyDiversion(portKey) {
+      if (!PORT_SPECS[portKey]) return;
+      initAudio();
+      playApprovalChime();
+
+      document.getElementById("dischargePort").value = portKey;
+      onPortSelectChange().then(() => {
+        const form = document.getElementById("validationForm");
+        if (form) {
+          handleValidation(new Event("submit"));
+        }
+        setTimeout(() => {
+          const chunk2 = document.getElementById("chunk2Section");
+          if (chunk2) chunk2.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      });
+    }
+
+    function calculateChunk2Strategy() {
+      const selectedPortKey = document.getElementById("dischargePort").value;
+      const selectedPort = PORT_SPECS[selectedPortKey];
+      if (!selectedPort) return;
+
+      const vesselName = (document.getElementById("vesselName").value || "Vessel").trim();
+      const vesselDraft = parseFloat(document.getElementById("vesselDraft").value) || 15.5;
+      const vesselLoa = parseFloat(document.getElementById("vesselLoa").value) || 265;
+      const cargoQty = parseFloat(document.getElementById("cargoQuantity").value) || 85000;
+
+      const plantKey = document.getElementById("targetSteelPlantSelect").value || "Rourkela";
+      const plant = STEEL_PLANTS[plantKey] || STEEL_PLANTS.Rourkela;
+      const currentStockMT = parseFloat(document.getElementById("plantStockSlider").value) || plant.defaultStock;
+
+      // 1. CALCULATE DELAY FOR SELECTED PORT (Strictly Operational Hours & Days - No Demurrage Rates)
+      const queueWaitHours = selectedPort.queueCount * selectedPort.queueWaitPerVesselHours;
+      const dischargeHours = cargoQty / selectedPort.unloadingRate;
+      const weatherHaltHours = (selectedPort.wave > 2.5 || selectedPort.wind > 40) ? 24.0 : 0.0;
+      const tidalHours = (selectedPortKey === "Haldia" && vesselDraft > 7.5) ? selectedPort.tidalPenalty : 0.0;
+
+      const totalPortTurnaroundHours = queueWaitHours + dischargeHours + weatherHaltHours + tidalHours;
+      const totalPortTurnaroundDays = totalPortTurnaroundHours / 24.0;
+
+      // Update Delay Card Header & Metric
+      const portBadge = document.getElementById("delayTargetPortBadge");
+      if (portBadge) portBadge.innerText = selectedPort.name.toUpperCase();
+
+      const daysVal = document.getElementById("totalDelayDaysVal");
+      const hoursVal = document.getElementById("totalDelayHoursVal");
+      if (daysVal) daysVal.innerText = totalPortTurnaroundDays.toFixed(1);
+      if (hoursVal) hoursVal.innerText = totalPortTurnaroundHours.toFixed(1);
+
+      // 4 Delay Factor Breakdown Grid
+      const elQueueHours = document.getElementById("delayQueueHours");
+      const elQueueCount = document.getElementById("delayQueueCountLabel");
+      if (elQueueHours) elQueueHours.innerText = queueWaitHours.toFixed(1) + "h";
+      if (elQueueCount) elQueueCount.innerText = `${selectedPort.queueCount} Vessel${selectedPort.queueCount === 1 ? '' : 's'}`;
+
+      const elDischargeHours = document.getElementById("delayDischargeHours");
+      const elDischargeRate = document.getElementById("delayDischargeRateLabel");
+      if (elDischargeHours) elDischargeHours.innerText = dischargeHours.toFixed(1) + "h";
+      if (elDischargeRate) elDischargeRate.innerText = `${selectedPort.unloadingRate.toLocaleString()} MT/h`;
+
+      const elWeatherHours = document.getElementById("delayWeatherHours");
+      const elWeatherStatus = document.getElementById("delayWeatherStatusLabel");
+      if (elWeatherHours) elWeatherHours.innerText = weatherHaltHours.toFixed(1) + "h";
+      if (elWeatherStatus) {
+        if (weatherHaltHours > 0) {
+          elWeatherStatus.className = "text-[10px] font-mono text-red-600 font-bold block";
+          elWeatherStatus.innerText = "Halt (>2.5m Swell)";
+        } else {
+          elWeatherStatus.className = "text-[10px] font-mono text-emerald-600 font-bold block";
+          elWeatherStatus.innerText = "Calm (≤2.5m)";
+        }
+      }
+
+      const elTidalHours = document.getElementById("delayTidalHours");
+      const elTidalStatus = document.getElementById("delayTidalStatusLabel");
+      if (elTidalHours) elTidalHours.innerText = tidalHours.toFixed(1) + "h";
+      if (elTidalStatus) {
+        if (tidalHours > 0) {
+          elTidalStatus.className = "text-[10px] font-mono text-amber-600 font-bold block";
+          elTidalStatus.innerText = "+12h Lock Window";
+        } else {
+          elTidalStatus.className = "text-[10px] font-mono text-slate-500 block";
+          elTidalStatus.innerText = selectedPortKey === "Haldia" ? "Low Draft Safe" : "Deepwater CD";
+        }
+      }
+
+      // Formula breakdown row
+      const calcQueue = document.getElementById("calcQueueText");
+      const calcDischarge = document.getElementById("calcDischargeText");
+      const calcWeather = document.getElementById("calcWeatherText");
+      const calcTidal = document.getElementById("calcTidalText");
+      const calcTotal = document.getElementById("calcTotalText");
+
+      if (calcQueue) calcQueue.innerText = queueWaitHours.toFixed(0) + "h";
+      if (calcDischarge) calcDischarge.innerText = dischargeHours.toFixed(1) + "h";
+      if (calcWeather) calcWeather.innerText = weatherHaltHours.toFixed(0) + "h";
+      if (calcTidal) calcTidal.innerText = tidalHours.toFixed(0) + "h";
+      if (calcTotal) calcTotal.innerText = totalPortTurnaroundHours.toFixed(1) + " hrs";
+
+      // 2. STEEL PLANT STOCKPILE RUNWAY MODULE
+      const dailyBurn = plant.dailyBurnRate;
+      const runwayDays = currentStockMT / dailyBurn;
+      const railDays = plant.railTransitDays[selectedPortKey] || 2.0;
+      const totalDeliveryDays = COASTAL_SEA_TRANSIT_DAYS + totalPortTurnaroundDays + railDays;
+
+      const plantStockLabel = document.getElementById("plantStockLabel");
+      const dailyBurnLabel = document.getElementById("dailyBurnLabel");
+      const runwayDaysText = document.getElementById("runwayDaysText");
+      const cargoArrivalDaysText = document.getElementById("cargoArrivalDaysText");
+      const runwayBar = document.getElementById("runwayProgressBar");
+      const arrivalBar = document.getElementById("cargoArrivalProgressBar");
+      const alertBanner = document.getElementById("stockpileAlertBanner");
+
+      if (plantStockLabel) plantStockLabel.innerText = currentStockMT.toLocaleString() + " MT";
+      if (dailyBurnLabel) dailyBurnLabel.innerText = dailyBurn.toLocaleString() + " MT/day";
+      if (runwayDaysText) runwayDaysText.innerText = runwayDays.toFixed(1) + " Days";
+      if (cargoArrivalDaysText) cargoArrivalDaysText.innerText = totalDeliveryDays.toFixed(1) + " Days";
+
+      // Progress bars visual scaling (18 days scale)
+      const runwayPct = Math.min(100, Math.max(5, (runwayDays / 18) * 100));
+      const arrivalPct = Math.min(100, Math.max(5, (totalDeliveryDays / 18) * 100));
+
+      if (runwayBar) runwayBar.style.width = runwayPct + "%";
+      if (arrivalBar) arrivalBar.style.width = arrivalPct + "%";
+
+      // Update 3-Step Visual Math Summary Box
+      const mathStockLasts = document.getElementById("mathStockLasts");
+      const mathDeliveryArrives = document.getElementById("mathDeliveryArrives");
+      const mathMargin = document.getElementById("mathMargin");
+      const mathStep3Icon = document.getElementById("mathStep3Icon");
+
+      if (mathStockLasts) mathStockLasts.innerText = runwayDays.toFixed(1) + " Days";
+      if (mathDeliveryArrives) mathDeliveryArrives.innerText = totalDeliveryDays.toFixed(1) + " Days";
+
+      const isShutdownRisk = totalDeliveryDays > runwayDays;
+      const bufferDays = Math.abs(runwayDays - totalDeliveryDays).toFixed(1);
+
+      if (isShutdownRisk) {
+        if (runwayBar) {
+          runwayBar.className = "h-full bg-red-600 rounded-full transition-all duration-300 animate-pulse";
+        }
+        if (mathMargin) {
+          mathMargin.className = "font-black text-red-600 font-mono text-sm";
+          mathMargin.innerText = `-${bufferDays} Days (DEFICIT 🚨)`;
+        }
+        if (mathStep3Icon) {
+          mathStep3Icon.className = "w-5 h-5 rounded-full bg-red-100 border border-red-400 flex items-center justify-center text-[10px] font-black text-red-700 shrink-0";
+        }
+        if (alertBanner) {
+          alertBanner.className = "p-4 rounded-xl border border-red-500/80 bg-red-50 text-red-900 shadow-sm leading-relaxed transition-all duration-300";
+          alertBanner.innerHTML = `
+            <div class="flex items-center space-x-2 font-black text-red-700 mb-1.5 text-xs uppercase tracking-wide">
+              <span class="text-base">🚨</span>
+              <span>EMERGENCY: STOCK EXHAUSTION BEFORE CARGO ARRIVAL</span>
+            </div>
+            <div class="text-sm font-bold text-red-900 leading-snug font-sans">
+              Warning! Current coal stock will run out <span class="underline decoration-red-500 underline-offset-2">${bufferDays} days BEFORE</span> cargo arrives.
+            </div>
+            <div class="mt-2 text-xs text-slate-700 font-sans">
+              Plant capacity: <strong>${runwayDays.toFixed(1)} days</strong> | Cargo arrival: <strong>${totalDeliveryDays.toFixed(1)} days</strong> via ${selectedPort.shortName}.
+            </div>
+            <div class="mt-2 text-[11px] font-mono text-red-800 bg-red-100 p-2.5 rounded-lg border border-red-200 flex items-center justify-between">
+              <span>⚠️ Recommended Action: Divert vessel to faster port or schedule emergency rakes immediately!</span>
+              <span class="font-bold text-red-700 shrink-0 ml-2">SHORTFALL: -${bufferDays}d</span>
+            </div>
+          `;
+        }
+      } else {
+        if (runwayBar) {
+          runwayBar.className = "h-full bg-emerald-500 rounded-full transition-all duration-300";
+        }
+        if (mathMargin) {
+          mathMargin.className = "font-black text-emerald-700 font-mono text-sm";
+          mathMargin.innerText = `+${bufferDays} Days Left (SAFE ✓)`;
+        }
+        if (mathStep3Icon) {
+          mathStep3Icon.className = "w-5 h-5 rounded-full bg-emerald-100 border border-emerald-400 flex items-center justify-center text-[10px] font-black text-emerald-700 shrink-0";
+        }
+        if (alertBanner) {
+          alertBanner.className = "p-4 rounded-xl border border-emerald-500/60 bg-emerald-50 text-emerald-950 shadow-sm leading-relaxed transition-all duration-300";
+          alertBanner.innerHTML = `
+            <div class="flex items-center space-x-2 font-black text-emerald-700 mb-1.5 text-xs uppercase tracking-wide">
+              <span class="text-base">🛡️</span>
+              <span>OPERATIONAL STATUS: SECURE</span>
+            </div>
+            <div class="text-sm font-bold text-emerald-950 leading-snug font-sans">
+              Plant is 100% Safe. Cargo will arrive <span class="underline decoration-emerald-500 underline-offset-2">${bufferDays} days BEFORE</span> current coal stock runs out.
+            </div>
+            <div class="mt-2 text-xs text-slate-700 font-sans">
+              Stock lasts for <strong>${runwayDays.toFixed(1)} days</strong>, cargo arrives in <strong>${totalDeliveryDays.toFixed(1)} days</strong> via ${selectedPort.shortName}.
+            </div>
+            <div class="mt-2 text-[11px] font-mono text-emerald-800 bg-emerald-100 p-2.5 rounded-lg border border-emerald-200 flex items-center justify-between">
+              <span>✓ Blast furnace operations secure. Continuous raw material feed verified on ${plant.railNetwork}.</span>
+              <span class="font-bold text-emerald-700 shrink-0 ml-2">CUSHION: +${bufferDays}d</span>
+            </div>
+          `;
+        }
+      }
+
+      // 3. AUTO-DIVERSION STRATEGY & MULTI-PORT OPTIMIZATION ENGINE
+      const portEvaluations = Object.keys(PORT_SPECS).map(key => {
+        const p = PORT_SPECS[key];
+        const draftOk = vesselDraft <= p.maxDraft;
+        const loaOk = vesselLoa <= p.maxLoa;
+        const waveOk = p.wave <= 2.5;
+        const windOk = p.wind <= 40;
+        const isEligible = draftOk && loaOk && waveOk && windOk;
+
+        const qHours = p.queueCount * p.queueWaitPerVesselHours;
+        const dHours = cargoQty / p.unloadingRate;
+        const wHours = (!waveOk || !windOk) ? 24.0 : 0.0;
+        const tHours = (key === "Haldia" && vesselDraft > 7.5) ? p.tidalPenalty : 0.0;
+        const pTotalHours = qHours + dHours + wHours + tHours;
+        const pTotalDays = pTotalHours / 24.0;
+        const rDays = plant.railTransitDays[key] || 2.0;
+        const totDelivery = COASTAL_SEA_TRANSIT_DAYS + pTotalDays + rDays;
+
+        let rejectionReason = "";
+        if (!draftOk) rejectionReason = `Draft Grounding (${vesselDraft.toFixed(1)}m > ${p.maxDraft.toFixed(1)}m)`;
+        else if (!loaOk) rejectionReason = `LOA Violation (${vesselLoa}m > ${p.maxLoa}m)`;
+        else if (!waveOk) rejectionReason = `High Swell (${p.wave.toFixed(1)}m > 2.5m)`;
+        else if (!windOk) rejectionReason = `High Gale (${Math.round(p.wind)}k > 40k)`;
+
+        return {
+          key,
+          port: p,
+          isEligible,
+          rejectionReason,
+          qHours,
+          dHours,
+          wHours,
+          tHours,
+          pTotalHours,
+          pTotalDays,
+          rDays,
+          totDelivery,
+          isSelected: key === selectedPortKey
+        };
+      });
+
+      // Filter eligible ports and sort by total delivery window to plant
+      const eligiblePorts = portEvaluations.filter(e => e.isEligible)
+        .sort((a, b) => a.totDelivery - b.totDelivery);
+
+      const optimal = eligiblePorts.length > 0 ? eligiblePorts[0] : null;
+      const currentPortEval = portEvaluations.find(e => e.key === selectedPortKey);
+
+      // Render Optimal Recommendation Card
+      const optimalCard = document.getElementById("optimalPortCard");
+      const statusTag = document.getElementById("diversionStatusTag");
+
+      if (optimalCard) {
+        if (!currentPortEval.isEligible) {
+          if (statusTag) {
+            statusTag.className = "text-xs font-mono bg-red-900 text-red-200 px-3 py-1 rounded-full font-bold self-start sm:self-auto animate-pulse";
+            statusTag.innerText = "DIVERSION MANDATED // PORT REJECTED";
+          }
+          if (optimal) {
+            optimalCard.innerHTML = `
+              <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-amber-50 border border-amber-300">
+                <div class="space-y-1">
+                  <div class="flex items-center space-x-2">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-600 text-white uppercase tracking-wider">
+                      MANDATORY DIVERSION
+                    </span>
+                    <span class="text-xs font-mono text-amber-800 font-bold">
+                      RESCUES ${vesselName.toUpperCase()}
+                    </span>
+                  </div>
+                  <h4 class="text-base font-extrabold text-slate-900">
+                    Divert to ${optimal.port.name} (Delivery to ${plant.shortName}: ${optimal.totDelivery.toFixed(1)} Days)
+                  </h4>
+                  <p class="text-xs text-slate-700 max-w-2xl font-sans">
+                    ${selectedPort.shortName} is REJECTED (${currentPortEval.rejectionReason}). 
+                    <strong>${optimal.port.shortName}</strong> has permissible draft (${optimal.port.maxDraft}m), zero queue backlog, 
+                    and ${optimal.port.unloadingRate.toLocaleString()} MT/h unloading rate.
+                  </p>
+                </div>
+                <button type="button" onclick="applyDiversion('${optimal.key}')" class="shrink-0 px-5 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center space-x-2">
+                  <span>DIVERT TO ${optimal.port.shortName.toUpperCase()} NOW</span>
+                  <span>➔</span>
+                </button>
+              </div>
+            `;
+          } else {
+            optimalCard.innerHTML = `
+              <div class="p-4 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs font-mono">
+                <strong>OFFSHORE LIGHTERING REQUIRED:</strong> No East Coast port meets current vessel draft (${vesselDraft}m) and weather safety criteria.
+              </div>
+            `;
+          }
+        } else if (optimal && optimal.key !== selectedPortKey && (currentPortEval.totDelivery - optimal.totDelivery) >= 0.5) {
+          const daysSaved = (currentPortEval.totDelivery - optimal.totDelivery).toFixed(1);
+          if (statusTag) {
+            statusTag.className = "text-xs font-mono bg-cyan-900 text-cyan-200 px-3 py-1 rounded-full font-bold self-start sm:self-auto";
+            statusTag.innerText = `RECOMMENDED // SAVE ${daysSaved} DAYS`;
+          }
+          optimalCard.innerHTML = `
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-cyan-50 border border-cyan-300">
+              <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-cyan-700 text-white uppercase tracking-wider">
+                    OPERATIONAL DIVERSION RECOMMENDATION
+                  </span>
+                  <span class="text-xs font-mono text-cyan-900 font-bold">
+                    SAVES ${daysSaved} OPERATIONAL DAYS
+                  </span>
+                </div>
+                <h4 class="text-base font-extrabold text-slate-900">
+                  Reroute MV ${vesselName} to ${optimal.port.name}
+                </h4>
+                <p class="text-xs text-slate-700 max-w-2xl font-sans">
+                  ${selectedPort.shortName} has longer turnaround (${currentPortEval.pTotalDays.toFixed(1)}d vs ${optimal.pTotalDays.toFixed(1)}d). 
+                  Diverting to <strong>${optimal.port.shortName}</strong> delivers cargo to ${plant.shortName} in <strong>${optimal.totDelivery.toFixed(1)} days</strong> 
+                  (vs ${currentPortEval.totDelivery.toFixed(1)} days via ${selectedPort.shortName}), preserving blast furnace stockpile runway.
+                </p>
+              </div>
+              <button type="button" onclick="applyDiversion('${optimal.key}')" class="shrink-0 px-5 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-mono font-bold text-xs uppercase tracking-wider transition shadow-lg flex items-center space-x-2">
+                <span>DIVERT TO ${optimal.port.shortName.toUpperCase()} (SAVE ${daysSaved}d)</span>
+                <span>➔</span>
+              </button>
+            </div>
+          `;
+        } else {
+          if (statusTag) {
+            statusTag.className = "text-xs font-mono bg-emerald-900 text-emerald-200 px-3 py-1 rounded-full font-bold self-start sm:self-auto";
+            statusTag.innerText = "OPTIMAL PORT SELECTED";
+          }
+          optimalCard.innerHTML = `
+            <div class="flex items-center space-x-3 p-4 rounded-xl bg-emerald-50 border border-emerald-300">
+              <div class="w-10 h-10 rounded-xl bg-emerald-100 border border-emerald-300 flex items-center justify-center text-xl text-emerald-700 shrink-0">
+                ✓
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-700 text-white uppercase tracking-wider">
+                    OPTIMAL DISCHARGE BERTH CONFIRMED
+                  </span>
+                </div>
+                <h4 class="text-sm font-extrabold text-slate-900 mt-0.5">
+                  ${selectedPort.name} is the optimal logistical corridor for ${plant.shortName}
+                </h4>
+                <p class="text-xs text-slate-600 font-sans mt-0.5">
+                  Berth turnaround and rail freight window (<strong>${currentPortEval.totDelivery.toFixed(1)} Days</strong> total delivery) provides the best supply chain efficiency. No diversion needed.
+                </p>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Populate Comparative Matrix Table
+      const matrixBody = document.getElementById("multiPortMatrixBody");
+      if (matrixBody) {
+        matrixBody.innerHTML = portEvaluations.map(ev => {
+          const isSelected = ev.isSelected;
+          const isBest = optimal && ev.key === optimal.key && !isSelected;
+          
+          let rowBg = "hover:bg-slate-50 transition";
+          if (isSelected) rowBg = "bg-cyan-50/70 border-l-4 border-cyan-600 font-semibold";
+          else if (isBest) rowBg = "bg-amber-50/50 hover:bg-amber-50";
+
+          let statusCol = "";
+          if (isSelected) {
+            statusCol = `<span class="px-2.5 py-1 rounded bg-slate-900 text-cyan-300 font-bold text-[11px] border border-cyan-800">CURRENT SELECTION</span>`;
+          } else if (isBest && ev.isEligible) {
+            statusCol = `<button type="button" onclick="applyDiversion('${ev.key}')" class="px-3 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-[11px] shadow transition flex items-center space-x-1 mx-auto"><span>DIVERT HERE</span> <span>➔</span></button>`;
+          } else if (ev.isEligible) {
+            statusCol = `<button type="button" onclick="applyDiversion('${ev.key}')" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] border border-slate-300 transition mx-auto">Switch Port</button>`;
+          } else {
+            statusCol = `<span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px] border border-red-200" title="${ev.rejectionReason}">REJECTED (${ev.port.maxDraft}m limit)</span>`;
+          }
+
+          const queueColor = ev.port.queueCount > 2 ? "text-amber-600 font-bold" : (ev.port.queueCount === 0 ? "text-emerald-600 font-bold" : "text-slate-800");
+
+          return `
+            <tr class="${rowBg}">
+              <td class="py-3 px-4">
+                <div class="font-bold text-slate-900 flex items-center space-x-2">
+                  <span>${ev.port.name}</span>
+                  ${isSelected ? '<span class="text-[10px] text-cyan-700 font-mono">(Active)</span>' : ''}
+                  ${isBest ? '<span class="text-[10px] text-amber-600 font-mono font-bold">★ FASTEST</span>' : ''}
+                </div>
+                <div class="text-[10px] text-slate-500">Max Draft: ${ev.port.maxDraft.toFixed(1)}m • LOA: ${ev.port.maxLoa}m</div>
+              </td>
+              <td class="py-3 px-3 text-center">
+                <span class="${queueColor}">${ev.port.queueCount} vessel${ev.port.queueCount === 1 ? '' : 's'}</span>
+                <div class="text-[10px] text-slate-500 font-normal">~${ev.qHours.toFixed(0)}h wait</div>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <span class="font-bold text-slate-800">${ev.port.unloadingRate.toLocaleString()}</span>
+                <span class="text-[10px] text-slate-500 block font-normal">MT/hr</span>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <strong class="text-slate-900">${ev.pTotalDays.toFixed(1)}d</strong>
+                <span class="text-[10px] text-slate-500 block font-normal">${ev.pTotalHours.toFixed(1)}h</span>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <strong class="text-slate-800">${ev.rDays.toFixed(1)}d</strong>
+                <span class="text-[10px] text-slate-500 block font-normal">SER/ECoR</span>
+              </td>
+              <td class="py-3 px-3 text-right">
+                <strong class="text-base text-cyan-800">${ev.totDelivery.toFixed(1)}d</strong>
+                <span class="text-[10px] text-slate-500 block font-normal">Total Supply</span>
+              </td>
+              <td class="py-3 px-4 text-center">
+                ${statusCol}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    // --- STRATEGY MODULE MODAL VIEWS (OPTIMIZATION & RISK STRATEGY ENGINE) ---
+    // State for interactive modules
+    const MODULE_B_MONTHS = [
+      { name: 'Jan', risk: 3.2, color: 'bg-emerald-500', delay: '+0.5 Days (Clear seas)', demurrage: '1.0x Base ($18k/d)', rake: '94% (ECoR High Avail)', alert: 'Favorable navigational window. No seasonal congestion expected.' },
+      { name: 'Feb', risk: 2.8, color: 'bg-emerald-500', delay: '+0.2 Days (Optimal)', demurrage: '0.9x Base ($17k/d)', rake: '96% (ECoR Peak)', alert: 'Optimal transshipment conditions across eastern littoral corridors.' },
+      { name: 'Mar', risk: 3.8, color: 'bg-emerald-400', delay: '+0.8 Days (Pre-summer)', demurrage: '1.1x Base ($20k/d)', rake: '90% (Good)', alert: 'Mild seasonal swell pickup in southern Bay of Bengal.' },
+      { name: 'Apr', risk: 4.5, color: 'bg-cyan-500', delay: '+1.2 Days (Draft stable)', demurrage: '1.2x Base ($22k/d)', rake: '86% (Moderate)', alert: 'Summer heat load on rakes; pre-monsoon draft assessments begun.' },
+      { name: 'May', risk: 6.2, color: 'bg-amber-400', delay: '+2.1 Days (Early squalls)', demurrage: '1.4x Base ($25k/d)', rake: '82% (Tightening)', alert: 'Advance coking coal procurement now to bypass forthcoming monsoon surge.' },
+      { name: 'Jun', risk: 8.7, color: 'bg-red-500', delay: '+3.8 Days (Monsoon onset)', demurrage: '1.9x Base ($34k/d)', rake: '68% (Congested)', alert: 'Heavy sea swell alerts at Dhamra & Paradip. Berthing halts expected.' },
+      { name: 'Jul', risk: 9.4, color: 'bg-red-600', delay: '+4.5 Days (Peak Monsoon)', demurrage: '2.2x Base ($39k/d)', rake: '62% (Severe bottleneck)', alert: 'Peak Bay of Bengal cyclonic depression window. Deepwater approach swells > 3.5m.' },
+      { name: 'Aug', risk: 9.1, color: 'bg-red-600', delay: '+4.1 Days (Heavy rainfall)', demurrage: '2.0x Base ($36k/d)', rake: '65% (Slow turnaround)', alert: 'Continuous heavy rainfall; high risk of railway yard washouts and low conveyor throughput.' },
+      { name: 'Sep', risk: 8.2, color: 'bg-red-500', delay: '+3.4 Days (Monsoon retreat)', demurrage: '1.7x Base ($31k/d)', rake: '72% (Gradual recovery)', alert: 'Retreating monsoon squalls. Advance stockpiling buffer strictly advised.' },
+      { name: 'Oct', risk: 5.4, color: 'bg-amber-500', delay: '+1.6 Days (Post-monsoon)', demurrage: '1.3x Base ($23k/d)', rake: '84% (Improving)', alert: 'Post-monsoon stabilization. Good operational recovery window.' },
+      { name: 'Nov', risk: 4.0, color: 'bg-cyan-500', delay: '+0.9 Days (Calm conditions)', demurrage: '1.1x Base ($19k/d)', rake: '89% (High supply)', alert: 'Excellent vessel turnaround times and low coastal demurrage.' },
+      { name: 'Dec', risk: 3.4, color: 'bg-emerald-500', delay: '+0.5 Days (Winter high)', demurrage: '1.0x Base ($18k/d)', rake: '93% (Peak)', alert: 'Ideal dry bulk throughput and strong wagon supply across SER/ECoR networks.' }
+    ];
+
+    let selectedRiskMonthIndex = 6; // Default to July (Peak Monsoon)
+
+    function selectRiskMonth(idx) {
+      selectedRiskMonthIndex = idx;
+      renderModuleBContent();
+    }
+
+    function renderModuleBContent() {
+      const content = document.getElementById("moduleDrawerContent");
+      if (!content) return;
+      const m = MODULE_B_MONTHS[selectedRiskMonthIndex];
+
+      content.innerHTML = `
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+          <div class="flex items-center space-x-2">
+            <span class="text-xs font-mono bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded font-bold">
+              MODULE B
+            </span>
+            <span class="text-xs font-mono text-slate-400">• CHRONOLOGICAL FORECAST</span>
+          </div>
+          <span class="text-xs font-mono text-cyan-400">12-MONTH HORIZON (2026-2027)</span>
+        </div>
+
+        <div class="mb-5">
+          <h3 class="text-xl sm:text-2xl font-extrabold text-white">12-Month Chronological Risk Curve</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Simulates long-range seasonal risk factors including Bay of Bengal monsoon swells, Capesize demurrage surges, draft restrictions, and ECoR railway rake availability.
+          </p>
+        </div>
+
+        <!-- 12-Month Interactive Bar Timeline -->
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 mb-5">
+          <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-3">
+            <span class="font-bold text-slate-300 uppercase tracking-wider">Historical &amp; Predictive Risk Index (1 - 10 Scale)</span>
+            <span class="text-amber-400 font-bold">🔴 Jun - Sep: High-Risk Monsoon Window</span>
+          </div>
+
+          <div class="grid grid-cols-12 gap-1.5 sm:gap-2 items-end h-36 pt-4 border-b border-slate-800 pb-2">
+            ${MODULE_B_MONTHS.map((item, idx) => {
+              const heightPct = Math.round((item.risk / 10) * 100);
+              const isSelected = idx === selectedRiskMonthIndex;
+              return `
+                <div onclick="selectRiskMonth(${idx})" class="group cursor-pointer flex flex-col items-center justify-end h-full">
+                  <span class="text-[9px] font-mono ${isSelected ? 'text-cyan-300 font-bold' : 'text-slate-500'} group-hover:text-cyan-400 transition mb-1">
+                    ${item.risk}
+                  </span>
+                  <div class="w-full ${item.color} rounded-t transition-all duration-200 ${isSelected ? 'ring-2 ring-cyan-400 shadow-lg shadow-cyan-500/30 brightness-125 scale-x-105' : 'opacity-80 group-hover:opacity-100'}" style="height: ${heightPct}%;"></div>
+                  <span class="text-[10px] font-mono mt-2 ${isSelected ? 'text-white font-black underline decoration-cyan-400 underline-offset-2' : 'text-slate-400'}">
+                    ${item.name}
+                  </span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2">
+            <span>Low Risk (1.0 - 4.0)</span>
+            <span>Moderate (4.1 - 7.0)</span>
+            <span class="text-red-400 font-bold">Critical Monsoon Surge (7.1 - 10.0)</span>
+          </div>
+        </div>
+
+        <!-- Detail Breakdown Panel for Selected Month -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5 font-mono">
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+            <span class="text-[10px] text-slate-500 uppercase block font-bold">Selected Month</span>
+            <div class="text-lg font-black text-white mt-0.5">${m.name} 2026</div>
+            <span class="text-xs font-bold ${m.risk >= 7 ? 'text-red-400' : (m.risk >= 4.5 ? 'text-amber-400' : 'text-emerald-400')}">Risk Score: ${m.risk} / 10</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+            <span class="text-[10px] text-slate-500 uppercase block font-bold">Port Discharge Delay</span>
+            <div class="text-lg font-black text-cyan-400 mt-0.5">${m.delay}</div>
+            <span class="text-[10px] text-slate-400 block">Approach swell penalty</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+            <span class="text-[10px] text-slate-500 uppercase block font-bold">Demurrage / Rake Supply</span>
+            <div class="text-sm font-bold text-amber-400 mt-0.5">${m.demurrage}</div>
+            <span class="text-[10px] text-emerald-400 block">Rakes: ${m.rake}</span>
+          </div>
+        </div>
+
+        <!-- Operational Advisory Card -->
+        <div class="p-4 rounded-xl ${m.risk >= 7 ? 'bg-red-950/60 border border-red-800/80 text-red-200' : 'bg-cyan-950/50 border border-cyan-800/60 text-cyan-200'} font-sans">
+          <div class="flex items-center space-x-2 font-mono text-xs uppercase font-bold mb-1.5 ${m.risk >= 7 ? 'text-red-400' : 'text-cyan-300'}">
+            <span>${m.risk >= 7 ? '⚠️ OPERATIONAL ALERT & PREDICTIVE ACTION' : '✓ STRATEGIC PROCUREMENT ADVISORY'}</span>
+          </div>
+          <div class="text-sm leading-relaxed">
+            ${m.alert}
+          </div>
+          <div class="mt-2.5 pt-2 border-t ${m.risk >= 7 ? 'border-red-900/60' : 'border-cyan-900/60'} text-xs font-mono flex items-center justify-between text-slate-300">
+            <span>💡 Predictive Recommendation: <strong>"Advance ${m.name} Coking Coal procurement to May 15 to bypass Dhamra Port monsoon swell window"</strong></span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Module C State for Map toggles
+    let mapShowMatches = true;
+    let mapShowWeather = true;
+    let mapShowAIS = true;
+
+    function toggleMapFilter(type) {
+      if (type === 'matches') mapShowMatches = !mapShowMatches;
+      if (type === 'weather') mapShowWeather = !mapShowWeather;
+      if (type === 'ais') mapShowAIS = !mapShowAIS;
+      openModuleModal('C');
+    }
+
+    function openModuleModal(moduleType) {
+      initAudio();
+      playApprovalChime();
+
+      const drawer = document.getElementById("moduleDrawer");
+      const content = document.getElementById("moduleDrawerContent");
+      if (!drawer || !content) return;
+
+      if (moduleType === 'A') {
+        // MODULE A: PEAK SEASON STOCKPILING DECISION ENGINE
+        const expectedPriceIncreasePerTon = 15;
+        const projectedDemurrageSavings = 25000;
+        const monthlyHoldingCostPerTon = 4;
+        const cargoVolume = 50000;
+
+        const totalSavings = (expectedPriceIncreasePerTon * cargoVolume) + projectedDemurrageSavings; // 750,000 + 25,000 = 775,000
+        const totalHoldingCost = monthlyHoldingCostPerTon * cargoVolume; // 200,000
+        const netBenefit = totalSavings - totalHoldingCost; // 575,000
+        const isOptimal = netBenefit > 0;
+
+        content.innerHTML = `
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-mono bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5 rounded font-bold">
+                MODULE A
+              </span>
+              <span class="text-xs font-mono text-slate-400">• STRATEGIC PROCUREMENT</span>
+            </div>
+            <span class="text-xs font-mono text-slate-400">FINANCIAL ENGINE v2.6</span>
+          </div>
+
+          <div class="mb-5">
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Peak Season Stockpiling Engine</h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Evaluates the financial trade-off of early inventory accumulation against daily storage holding costs and major port congestion risk metrics.
+            </p>
+          </div>
+
+          <!-- Early Stockpiling Recommendation Badge -->
+          <div class="p-4 rounded-xl ${isOptimal ? 'bg-emerald-950/80 border border-emerald-600' : 'bg-red-950/80 border border-red-600'} mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-mono tracking-wider uppercase ${isOptimal ? 'text-emerald-400' : 'text-red-400'} font-bold block mb-0.5">
+                EARLY STOCKPILING RECOMMENDATION
+              </span>
+              <div class="text-lg font-black ${isOptimal ? 'text-emerald-300' : 'text-red-300'}">
+                ${isOptimal ? 'RECOMMENDATION: OPTIMAL (EARLY STOCKPILE)' : 'RECOMMENDATION: DEFER PROCUREMENT'}
+              </div>
+              <p class="text-xs text-slate-300 mt-1 font-sans">
+                Accumulate pre-monsoon buffer immediately. Net strategic advantage: <strong class="text-white font-mono">$${netBenefit.toLocaleString()}</strong>.
+              </p>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="text-2xl sm:text-3xl font-black font-mono ${isOptimal ? 'text-emerald-400' : 'text-red-400'}">
+                +$${(netBenefit / 1000).toFixed(0)}k
+              </div>
+              <span class="text-[10px] font-mono text-slate-400">Net Estimated Benefit</span>
+            </div>
+          </div>
+
+          <!-- Financial Decision Formula & Variables Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 font-mono text-xs">
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <span class="text-slate-500 uppercase text-[10px] block">Cargo Volume</span>
+              <div class="text-base font-bold text-white mt-0.5">${cargoVolume.toLocaleString()} Tons</div>
+              <span class="text-[10px] text-cyan-400">Hard Coking Coal</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <span class="text-slate-500 uppercase text-[10px] block">Spot Spike Avoided</span>
+              <div class="text-base font-bold text-emerald-400 mt-0.5">$${expectedPriceIncreasePerTon} / Ton</div>
+              <span class="text-[10px] text-slate-400">$${(expectedPriceIncreasePerTon * cargoVolume).toLocaleString()} saved</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <span class="text-slate-500 uppercase text-[10px] block">Storage Holding Cost</span>
+              <div class="text-base font-bold text-amber-400 mt-0.5">$${monthlyHoldingCostPerTon} / Ton/mo</div>
+              <span class="text-[10px] text-slate-400">Total: $${totalHoldingCost.toLocaleString()}</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+              <span class="text-slate-500 uppercase text-[10px] block">Avoided Demurrage</span>
+              <div class="text-base font-bold text-cyan-400 mt-0.5">$${projectedDemurrageSavings.toLocaleString()}</div>
+              <span class="text-[10px] text-slate-400">Vessel queue savings</span>
+            </div>
+          </div>
+
+          <!-- Formula Breakdown Card -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 font-mono text-xs space-y-2 mb-5">
+            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">DECISION ALGORITHM MATH</div>
+            <div class="flex justify-between text-slate-300">
+              <span>Total Savings = ($${expectedPriceIncreasePerTon} × ${cargoVolume.toLocaleString()} MT) + $${projectedDemurrageSavings.toLocaleString()}</span>
+              <strong class="text-emerald-400">= $${totalSavings.toLocaleString()}</strong>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Total Holding Cost = $${monthlyHoldingCostPerTon} × ${cargoVolume.toLocaleString()} MT</span>
+              <strong class="text-amber-400">= $${totalHoldingCost.toLocaleString()}</strong>
+            </div>
+            <div class="border-t border-slate-800 pt-2 flex justify-between font-bold text-sm">
+              <span class="text-white">Net Benefit = Total Savings - Total Holding Cost</span>
+              <strong class="text-emerald-400">+$${netBenefit.toLocaleString()}</strong>
+            </div>
+          </div>
+
+          <!-- Port Congestion Risk Indicator -->
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-mono uppercase font-bold text-slate-300">Yard Capacity Utilization &amp; Port Congestion Indicator</span>
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-950 text-amber-400 border border-amber-800">
+                MEDIUM CONGESTION (68% UTILIZATION)
+              </span>
+            </div>
+            <div class="w-full bg-slate-800 rounded-full h-2.5 overflow-hidden border border-slate-700">
+              <div class="bg-gradient-to-r from-emerald-500 via-amber-400 to-red-500 h-full rounded-full" style="width: 68%;"></div>
+            </div>
+            <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 mt-2">
+              <span>Dhamra Yard: 58%</span>
+              <span>Paradip Yard: 74%</span>
+              <span>Vizag Port Yard: 69%</span>
+              <span>Haldia Yard: 81%</span>
+            </div>
+          </div>
+        `;
+      } else if (moduleType === 'B') {
+        renderModuleBContent();
+      } else if (moduleType === 'C') {
+        // MODULE C: INTER-PSU CO-LOADING SCANNER & REAL-TIME SATELLITE MAP
+        content.innerHTML = `
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-mono bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded font-bold">
+                MODULE C
+              </span>
+              <span class="text-xs font-mono text-slate-400">• MULTI-MODAL LOGISTICS SCANNER</span>
+            </div>
+            <span class="text-xs font-mono text-emerald-400">LIVE AIS SATELLITE LINK ACTIVE</span>
+          </div>
+
+          <div class="mb-4">
+            <h3 class="text-xl sm:text-2xl font-extrabold text-white">Inter-PSU &amp; Global Ship Sharing Scanner</h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Live joint-chartering intelligence across domestic public sector units (SAIL, RINL, NMDC) and real-time geodesic satellite tracking between Australian loading terminals and Indian discharge ports.
+            </p>
+          </div>
+
+          <!-- Data Integration Source & Verification Indicator Card -->
+          <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <div class="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">DATA INTEGRATION &amp; VERIFICATION SOURCES</div>
+              <div class="flex items-center space-x-2 text-[10px] font-mono">
+                <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">✓ National Logistics Portal (NLP-M) Verified</span>
+                <span class="px-2 py-0.5 rounded bg-blue-950 text-blue-300 border border-blue-800">✓ Baltic Freight Manifest Match</span>
+                <span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 border border-indigo-800">✓ SAIL-RINL Joint Logistics API</span>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-slate-300 pt-2 border-t border-slate-800/80 gap-2">
+              <div class="flex items-center space-x-2">
+                <span class="text-cyan-400">ROUTE ALIGNMENT:</span>
+                <span class="font-bold text-white">Australia (Hay Point) ➔ Dhamra Port (SAIL) / Vizag Port (RINL)</span>
+              </div>
+              <span class="text-emerald-400 font-bold">ETA ALIGNMENT: Window overlapping within 48 hours</span>
+            </div>
+          </div>
+
+          <!-- LIVE SATELLITE MAP & ANIMATED GEODESIC SHIPPING LANE -->
+          <div class="p-4 rounded-xl bg-slate-950 border border-cyan-500/30 shadow-2xl mb-5 relative overflow-hidden">
+            <!-- Map Toolbar Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-800/80">
+              <div class="flex items-center space-x-2 text-xs font-mono text-cyan-300 font-bold">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>TACTICAL RADAR VIEWPORT // INDIAN OCEAN TO BAY OF BENGAL</span>
+              </div>
+              <div class="flex items-center space-x-2 text-[10px] font-mono">
+                <button type="button" onclick="toggleMapFilter('matches')" class="px-2.5 py-1 rounded transition border ${mapShowMatches ? 'bg-cyan-900/60 border-cyan-500 text-cyan-200' : 'bg-slate-900 border-slate-700 text-slate-400'}">
+                  Co-Loading Matches: ${mapShowMatches ? 'ON' : 'OFF'}
+                </button>
+                <button type="button" onclick="toggleMapFilter('weather')" class="px-2.5 py-1 rounded transition border ${mapShowWeather ? 'bg-amber-900/60 border-amber-500 text-amber-200' : 'bg-slate-900 border-slate-700 text-slate-400'}">
+                  Weather Warnings: ${mapShowWeather ? 'ON' : 'OFF'}
+                </button>
+                <button type="button" onclick="toggleMapFilter('ais')" class="px-2.5 py-1 rounded transition border ${mapShowAIS ? 'bg-emerald-900/60 border-emerald-500 text-emerald-200' : 'bg-slate-900 border-slate-700 text-slate-400'}">
+                  AIS Feed: ${mapShowAIS ? 'LIVE' : 'MOCK'}
+                </button>
+              </div>
+            </div>
+
+            <!-- SVG Tactical Map Canvas -->
+            <div class="relative w-full h-72 sm:h-80 bg-[#070e1e] rounded-lg border border-slate-800/80 overflow-hidden">
+              <svg viewBox="0 0 800 360" class="w-full h-full" preserveAspectRatio="none">
+                <defs>
+                  <!-- Radar Sweep Radial Gradient -->
+                  <radialGradient id="radarGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#06b6d4" stop-opacity="0"/>
+                  </radialGradient>
+                  <!-- Shipping Lane Gradient -->
+                  <linearGradient id="routeGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#fbbf24"/>
+                    <stop offset="50%" stop-color="#38bdf8"/>
+                    <stop offset="100%" stop-color="#34d399"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Grid Coordinates -->
+                <g stroke="#1e293b" stroke-width="0.75" stroke-dasharray="4,4">
+                  <line x1="0" y1="90" x2="800" y2="90"/>
+                  <line x1="0" y1="180" x2="800" y2="180"/>
+                  <line x1="0" y1="270" x2="800" y2="270"/>
+                  <line x1="200" y1="0" x2="200" y2="360"/>
+                  <line x1="400" y1="0" x2="400" y2="360"/>
+                  <line x1="600" y1="0" x2="600" y2="360"/>
+                </g>
+
+                <!-- Landmass outlines (Abstract styling: India / Bay of Bengal / Western Australia) -->
+                <!-- India Subcontinent Outline -->
+                <path d="M 170 30 L 260 40 L 290 90 L 270 170 L 220 220 L 205 180 L 175 140 Z" fill="#0f1f38" stroke="#1e3a5f" stroke-width="1.2" opacity="0.65"/>
+                <!-- Australia Coastline -->
+                <path d="M 640 230 L 760 210 L 790 280 L 720 330 L 630 300 Z" fill="#0f1f38" stroke="#1e3a5f" stroke-width="1.2" opacity="0.65"/>
+
+                ${mapShowWeather ? `
+                  <!-- Bay of Bengal Weather Warning Zone -->
+                  <ellipse cx="280" cy="140" rx="45" ry="30" fill="#ef4444" fill-opacity="0.12" stroke="#ef4444" stroke-width="1" stroke-dasharray="3,3"/>
+                  <text x="250" y="145" fill="#f87171" font-size="9" font-family="monospace">⚠️ Swell 2.8m</text>
+                ` : ''}
+
+                <!-- Geodesic Shipping Lane Path: Hay Point (Australia, x:700, y:260) -> Waypoint (x:380, y:180) -> Split -->
+                <!-- Main Leg -->
+                <path id="shippingLaneMain" d="M 700 260 Q 490 220 380 180" fill="none" stroke="url(#routeGradient)" stroke-width="2.5" stroke-dasharray="6,4" class="animate-dash"/>
+
+                <!-- Split to Dhamra Port (Primary SAIL) -->
+                <path id="shippingLaneDhamra" d="M 380 180 Q 320 140 265 95" fill="none" stroke="#34d399" stroke-width="2" stroke-dasharray="4,3" class="animate-dash"/>
+
+                <!-- Split to Vizag Port (Secondary RINL) -->
+                <path id="shippingLaneVizag" d="M 380 180 Q 290 175 240 145" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3" class="animate-dash"/>
+
+                <!-- Waypoint Divergence Node -->
+                <circle cx="380" cy="180" r="5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+                <text x="390" y="185" fill="#38bdf8" font-size="10" font-family="monospace" font-weight="bold">WAYPOINT: CO-LOAD SPLIT</text>
+
+                <!-- Origin Marker: Hay Point / Port Hedland Australia -->
+                <circle cx="700" cy="260" r="7" fill="#fbbf24" stroke="#ffffff" stroke-width="1.5"/>
+                <circle cx="700" cy="260" r="14" stroke="#fbbf24" stroke-width="1" fill="none" class="pulse-ring"/>
+                <text x="640" y="290" fill="#fef08a" font-size="11" font-family="monospace" font-weight="bold">⚓ HAY POINT (AUSTRALIA)</text>
+                <text x="660" y="303" fill="#cbd5e1" font-size="9" font-family="monospace">Origin Terminal [SAIL/RINL]</text>
+
+                <!-- Destination Marker: Dhamra Port (SAIL) -->
+                <circle cx="265" cy="95" r="6" fill="#34d399" stroke="#ffffff" stroke-width="1.5"/>
+                <circle cx="265" cy="95" r="12" stroke="#34d399" stroke-width="1" fill="none" class="pulse-ring"/>
+                <text x="180" y="85" fill="#34d399" font-size="10" font-family="monospace" font-weight="bold">⚓ DHAMRA PORT (SAIL)</text>
+                <text x="180" y="97" fill="#94a3b8" font-size="8" font-family="monospace">Primary Discharge: 55,000 MT</text>
+
+                <!-- Destination Marker: Vizag Port (RINL) -->
+                <circle cx="240" cy="145" r="6" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+                <circle cx="240" cy="145" r="12" stroke="#38bdf8" stroke-width="1" fill="none" class="pulse-ring"/>
+                <text x="145" y="140" fill="#38bdf8" font-size="10" font-family="monospace" font-weight="bold">⚓ VIZAG PORT (RINL)</text>
+                <text x="145" y="152" fill="#94a3b8" font-size="8" font-family="monospace">Secondary Branch: 30,000 MT</text>
+
+                ${mapShowAIS ? `
+                  <!-- Active Moving Vessel: MV Pacific Titan (Capesize) -->
+                  <!-- Vessel plotted near Bay of Bengal approach (x:450, y:200) -->
+                  <g transform="translate(470, 205)" class="cursor-pointer">
+                    <circle cx="0" cy="0" r="6" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+                    <circle cx="0" cy="0" r="12" stroke="#38bdf8" stroke-width="1" fill="none" class="pulse-ring"/>
+                    <!-- Vessel Heading Indicator -->
+                    <line x1="0" y1="0" x2="-14" y2="-8" stroke="#38bdf8" stroke-width="2"/>
+                    <!-- Radar Ping Waves -->
+                    <circle cx="0" cy="0" r="22" stroke="#06b6d4" stroke-opacity="0.3" stroke-width="1" fill="none"/>
+                  </g>
+
+                  <!-- Vessel Telemetry Tooltip -->
+                  <g transform="translate(490, 155)">
+                    <rect x="0" y="0" width="190" height="65" rx="8" fill="#0f172a" fill-opacity="0.95" stroke="#38bdf8" stroke-width="1"/>
+                    <text x="10" y="16" fill="#38bdf8" font-size="10" font-family="monospace" font-weight="bold">🚢 MV PACIFIC TITAN (Capesize)</text>
+                    <text x="10" y="30" fill="#cbd5e1" font-size="9" font-family="monospace">Speed: 14.2 Knots | Heading: 285° NW</text>
+                    <text x="10" y="44" fill="#34d399" font-size="9" font-family="monospace">AIS Signal: Active (Updated 3m ago)</text>
+                    <text x="10" y="58" fill="#fbbf24" font-size="9" font-family="monospace">Shared Capacity Space: 35,000 MT</text>
+                  </g>
+                ` : ''}
+              </svg>
+            </div>
+
+            <!-- Route Optimization Summary Bar -->
+            <div class="mt-3 p-2.5 rounded-lg bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-slate-300 gap-2">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Dual-Discharge Route Optimization Active:</span>
+                <strong class="text-white">Australia ➔ Bay of Bengal</strong>
+              </div>
+              <div class="flex items-center space-x-3 text-emerald-400 font-bold">
+                <span>Fuel Savings: <strong class="text-white">$142,000</strong></span>
+                <span>|</span>
+                <span>Carbon Reduction: <strong class="text-white">18% CO₂e</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logistics Matchmaking Table (RINL, NMDC, Coal India) -->
+          <div class="mb-5">
+            <div class="text-xs font-mono text-slate-400 font-bold uppercase tracking-wider mb-2">
+              ACTIVE CO-LOADING OPPORTUNITIES &amp; FREIGHT POOLING
+            </div>
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full text-left text-xs font-mono bg-slate-900">
+                <thead>
+                  <tr class="bg-slate-800 text-slate-400 uppercase text-[10px]">
+                    <th class="py-2.5 px-3">Partner Entity</th>
+                    <th class="py-2.5 px-3">Trade Route &amp; Origin</th>
+                    <th class="py-2.5 px-3 text-right">Shared Space</th>
+                    <th class="py-2.5 px-3 text-right">Estimated Savings</th>
+                    <th class="py-2.5 px-3 text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300">
+                  <tr class="hover:bg-slate-800/50 transition">
+                    <td class="py-3 px-3">
+                      <strong class="text-white block">RINL - Vizag Steel Plant</strong>
+                      <span class="text-[10px] text-slate-500">Coking Coal Parcel</span>
+                    </td>
+                    <td class="py-3 px-3">
+                      <span>Hay Point (AU) ➔ Dhamra / Vizag</span>
+                      <span class="text-[10px] text-cyan-400 block">Capesize Route Split</span>
+                    </td>
+                    <td class="py-3 px-3 text-right font-bold text-white">35,000 MT</td>
+                    <td class="py-3 px-3 text-right text-emerald-400 font-bold">
+                      +$220,000
+                      <span class="text-[10px] text-slate-400 block font-normal">$18.5/Ton saved</span>
+                    </td>
+                    <td class="py-3 px-3 text-center">
+                      <button type="button" onclick="alert('Co-Loading Request Transmitted to RINL Logistics Portal via NLP-M API!')" class="px-2.5 py-1 rounded bg-cyan-600 hover:bg-cyan-500 text-white text-[11px] font-bold transition shadow">
+                        Request Co-Loading Split
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-800/50 transition">
+                    <td class="py-3 px-3">
+                      <strong class="text-white block">NMDC Iron Ore Logistics</strong>
+                      <span class="text-[10px] text-slate-500">Backhaul Integration</span>
+                    </td>
+                    <td class="py-3 px-3">
+                      <span>Vizag Port ➔ Paradip Port</span>
+                      <span class="text-[10px] text-amber-400 block">Coastal Rerouting</span>
+                    </td>
+                    <td class="py-3 px-3 text-right font-bold text-white">25,000 MT</td>
+                    <td class="py-3 px-3 text-right text-emerald-400 font-bold">
+                      +$145,000
+                      <span class="text-[10px] text-slate-400 block font-normal">18% Bunker Split</span>
+                    </td>
+                    <td class="py-3 px-3 text-center">
+                      <button type="button" onclick="alert('Co-Loading Request Transmitted to NMDC Coastal Fleet Desk!')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px] font-bold border border-slate-700 transition">
+                        Request Co-Loading Split
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr class="hover:bg-slate-800/50 transition">
+                    <td class="py-3 px-3">
+                      <strong class="text-white block">Coal India Limited (CIL)</strong>
+                      <span class="text-[10px] text-slate-500">Domestic Coastal Transshipment</span>
+                    </td>
+                    <td class="py-3 px-3">
+                      <span>Dhamra ➔ Haldia Anchor</span>
+                      <span class="text-[10px] text-slate-500 block">Feeder Barge Synergy</span>
+                    </td>
+                    <td class="py-3 px-3 text-right font-bold text-white">20,000 MT</td>
+                    <td class="py-3 px-3 text-right text-emerald-400 font-bold">
+                      +$92,000
+                      <span class="text-[10px] text-slate-400 block font-normal">Tidal Lightening</span>
+                    </td>
+                    <td class="py-3 px-3 text-center">
+                      <button type="button" onclick="alert('Request sent to Coal India Transshipment Command!')" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px] font-bold border border-slate-700 transition">
+                        Request Co-Loading Split
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Cost-Split Comparison Card -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 font-mono text-xs">
+            <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-500 uppercase block font-bold">Solo Charter Cost</span>
+              <div class="text-xl font-bold text-slate-300 mt-1">$1,280,000</div>
+              <span class="text-[10px] text-slate-500">100% Bunker fuel &amp; port tariffs absorbed by single PSU</span>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-cyan-950/60 border border-cyan-800">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] text-cyan-400 uppercase block font-bold">Shared Joint Charter Cost</span>
+                <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-1.5 py-0.5 rounded font-bold">
+                  BUNKER COST SPLIT: 50% REDUCTION
+                </span>
+              </div>
+              <div class="text-xl font-bold text-emerald-400 mt-1">$640,000 per PSU</div>
+              <span class="text-[10px] text-cyan-300">50% cost reduction via RINL joint chartering venture</span>
+            </div>
+          </div>
+
+          <!-- Operational Alert Note -->
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 flex items-center justify-between">
+            <span>✓ Co-loading with RINL verified at Dhamra Berth 2. Dual-discharge sequence optimized for ECoR railway rake loading.</span>
+          </div>
+        `;
+      }
+
+      drawer.classList.remove("hidden");
+    }
+
+    function closeModuleModal() {
+      document.getElementById("moduleDrawer").classList.add("hidden");
+    }
+
+    // --- INITIALIZATION ---
+    window.addEventListener("DOMContentLoaded", () => {
+      onPortSelectChange();
+      fetchAllPortsWeather();
+
+      // Enable Web Audio on first user interaction anywhere
+      document.body.addEventListener("click", () => {
+        initAudio();
+      }, { once: true });
+    });
+  </script>
+</body>
+</html>
